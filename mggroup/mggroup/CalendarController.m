@@ -8,12 +8,19 @@
 
 #import "CalendarController.h"
 #import "DateCell.h"
+#import "DropDownView.h"
+#import "WaiterWorkNoteController.h"
+#import "DateChooseController.h"
 
-@interface CalendarController () <UICollectionViewDelegate,UICollectionViewDataSource>
+@interface CalendarController () <UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout>
 
 @property (weak, nonatomic) IBOutlet UILabel *yearMonthLabel;
 
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
+
+@property (strong, nonatomic) IBOutlet UIView *chooseDatePickerView;
+
+@property (strong, nonatomic) IBOutlet UIView *chooseDateShadowView;
 
 @property (nonatomic, strong) NSDate * date;
 
@@ -30,29 +37,58 @@
     
     self.date = [NSDate date];
     self.today = self.date;
+    
+    __weak typeof(self) weakSelf = self;
+    self.calendarBlock = ^(NSInteger day, NSInteger month, NSInteger year){
+        UIStoryboard * storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+        WaiterWorkNoteController * workController = [storyboard instantiateViewControllerWithIdentifier:@"waiterWorkNote"];
+        workController.titleDate = [NSString stringWithFormat:@"%ld年%ld月%ld日",year,month,day];
+        [weakSelf.navigationController pushViewController:workController animated:YES];
+    };
+    
+    UITapGestureRecognizer * change = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(hiddenChooseDateView:)];
+    [self.chooseDateShadowView addGestureRecognizer:change];
+    UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(chooseMonthYear:)];
+    [self.yearMonthLabel addGestureRecognizer:tap];
+    
+    self.chooseDateShadowView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5];
+    self.yearMonthLabel.layer.borderWidth = 0.5f;
+    self.yearMonthLabel.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dateChange:) name:@"DateChange" object:nil];
 }
 
-- (void)drawRect:(CGRect)rect
+- (void)dateChange:(NSNotification *)noti
 {
-    [self addSwipe];
-    [self collectionLayout];
+    self.chooseDateShadowView.hidden = YES;
+    NSInteger change = [noti.object integerValue];
+    self.date = [self allMonth:[NSDate date] withMonths:change];
+}
+
+- (void)hiddenChooseDateView:(UITapGestureRecognizer *)handle
+{
+    self.chooseDateShadowView.hidden = YES;
+}
+
+- (void)chooseMonthYear:(UITapGestureRecognizer *)handle
+{
+    self.chooseDateShadowView.hidden = NO;
 }
 
 - (void)awakeFromNib
 {
+    [super awakeFromNib];
+    
     [_collectionView registerClass:[DateCell class] forCellWithReuseIdentifier:@"dateCell"];
+    [self addSwipe];
 }
 
-- (void)collectionLayout
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    CGFloat itemWidth = _collectionView.frame.size.width / 7;
+    
+    CGFloat itemWidth = _collectionView.frame.size.width / 7 ;
     CGFloat itemHeight = _collectionView.frame.size.height / 6;
-    UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
-    layout.sectionInset = UIEdgeInsetsMake(0, 0, 0, 0);
-    layout.itemSize = CGSizeMake(itemWidth, itemHeight);
-    layout.minimumLineSpacing = 0;
-    layout.minimumInteritemSpacing = 0;
-    [_collectionView setCollectionViewLayout:layout animated:NO];
+    return CGSizeMake(itemWidth, itemHeight);
 }
 
 - (void)setDate:(NSDate *)date
@@ -119,7 +155,7 @@
 
 - (NSDate*)allMonth:(NSDate *)date withMonths:(NSInteger)months{
     NSDateComponents *dateComponents = [[NSDateComponents alloc] init];
-    dateComponents.month = months;
+    dateComponents.month = -months;
     NSDate *newDate = [[NSCalendar currentCalendar] dateByAddingComponents:dateComponents toDate:date options:0];
     return newDate;
 }
@@ -202,11 +238,7 @@
     NSInteger day = 0;
     NSInteger i = indexPath.row;
     day = i - firstWeekday + 1;
-    if (self.calendarBlock)
-    {
-        self.calendarBlock(day, [comp month], [comp year]);
-    }
-    
+    self.calendarBlock(day, [comp month], [comp year]);
 }
 
 - (void)didReceiveMemoryWarning {
@@ -244,8 +276,12 @@
     {
         
     }
-    
+    else if ([segue.identifier isEqualToString:@"dateChoose"])
+    {
+        DateChooseController * dateChooseController = [segue destinationViewController];
+        dateChooseController.beforeDate = self.beforeDate;
+        [dateChooseController.yearPicker reloadAllComponents];
+    }
 }
-
 
 @end

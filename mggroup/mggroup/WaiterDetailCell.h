@@ -10,4 +10,8 @@
 
 @interface WaiterDetailCell : UITableViewCell
 
+@property (strong, nonatomic) IBOutlet UILabel *waiterTitleLabel;
+
+@property (strong, nonatomic) IBOutlet UILabel *waiterContentLabel;
+
 @end

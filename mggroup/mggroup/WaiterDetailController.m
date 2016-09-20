@@ -7,8 +7,14 @@
 //
 
 #import "WaiterDetailController.h"
+#import "CreateWaiterController.h"
 
 @interface WaiterDetailController ()
+
+@property (strong, nonatomic) IBOutlet UIView *firstPage;
+@property (strong, nonatomic) IBOutlet UIView *lastPage;
+
+@property (nonatomic, assign) BOOL isFirstPage;
 
 @end
 
@@ -16,22 +22,52 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    
+    self.isFirstPage = YES;
+    self.navigationController.title = @"员工信息";
+}
+
+
+#pragma mark - 底部栏按钮触发
+
+- (IBAction)pageButton:(id)sender
+{
+    if (self.isFirstPage)
+    {
+        self.firstPage.hidden = YES;
+        self.lastPage.hidden = NO;
+    }
+    else
+    {
+        self.firstPage.hidden = NO;
+        self.lastPage.hidden = YES;
+    }
+    self.isFirstPage = !self.isFirstPage;
+    [self.pageButton setTitle:self.isFirstPage ? @"下一页" : @"上一页" forState:UIControlStateNormal];
+}
+
+- (IBAction)editButton:(id)sender
+{
+    UIStoryboard * storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    CreateWaiterController * createWaiter = [storyBoard instantiateViewControllerWithIdentifier:@"createWaiter"];
+    [self.navigationController pushViewController:createWaiter animated:YES];
+}
+
+- (IBAction)deleteButton:(id)sender
+{
+    UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"提示信息" message:@"您确认要删除该服务员吗？" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction * action1 = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        
+    }];
+    UIAlertAction * action2 = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
+    [alert addAction:action1];
+    [alert addAction:action2];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

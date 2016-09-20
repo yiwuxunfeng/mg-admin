@@ -10,4 +10,6 @@
 
 @interface DetailViewController : ViewController
 
+@property (nonatomic, strong) NSDate * beforeDate;
+
 @end

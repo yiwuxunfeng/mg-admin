@@ -7,7 +7,12 @@
 //
 
 #import "ViewController.h"
+#import "CreateWaiterAreaCell.h"
 
 @interface WaiterDetailController : ViewController
+
+@property (strong, nonatomic) IBOutlet UIButton *pageButton;
+@property (strong, nonatomic) IBOutlet UIButton *editButton;
+@property (strong, nonatomic) IBOutlet UIButton *deleteButton;
 
 @end
