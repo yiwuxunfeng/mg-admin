@@ -104,15 +104,15 @@
 {
     if (self.selectIndex == 0)
     {
-        return 80;
+        return 155;
     }
     else if (self.selectIndex == 1)
     {
-        return 100;
+        return 240;
     }
     else
     {
-        return 80;
+        return 180;
     }
 }
 

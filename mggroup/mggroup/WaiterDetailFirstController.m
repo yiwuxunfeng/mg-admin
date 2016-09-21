@@ -9,10 +9,14 @@
 #import "WaiterDetailFirstController.h"
 #import "WaiterDetailCell.h"
 
+#define kScreenHeight    ([UIScreen mainScreen].bounds.size.height)
+
 @interface WaiterDetailFirstController ()<UITableViewDelegate,UITableViewDataSource>
 
 @property (nonatomic, strong) NSMutableArray * waiterArray;
 @property (nonatomic, strong) NSMutableArray * titleArray;
+
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *tableViewHeight;
 
 @end
 
@@ -45,6 +49,12 @@
     cell.waiterTitleLabel.text = self.titleArray[indexPath.row];
     cell.waiterContentLabel.text = self.waiterArray[indexPath.row];
     return cell;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    self.tableViewHeight.constant = (kScreenHeight / 15) * 5;
+    return kScreenHeight / 15;
 }
 
 - (void)didReceiveMemoryWarning {
