@@ -11,6 +11,8 @@
 #import "DropDownView.h"
 #import "WaiterWorkNoteController.h"
 #import "DateChooseController.h"
+#import "TaskCancelController.h"
+#import "TaskCompleteController.h"
 
 @interface CalendarController () <UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout>
 
@@ -41,9 +43,24 @@
     __weak typeof(self) weakSelf = self;
     self.calendarBlock = ^(NSInteger day, NSInteger month, NSInteger year){
         UIStoryboard * storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-        WaiterWorkNoteController * workController = [storyboard instantiateViewControllerWithIdentifier:@"waiterWorkNote"];
-        workController.titleDate = [NSString stringWithFormat:@"%ld年%ld月%ld日",year,month,day];
-        [weakSelf.navigationController pushViewController:workController animated:YES];
+        if ([weakSelf.controllerType isEqualToString:@"WaiterDetail"])
+        {
+            WaiterWorkNoteController * workController = [storyboard instantiateViewControllerWithIdentifier:@"waiterWorkNote"];
+            workController.titleDate = [NSString stringWithFormat:@"%ld年%ld月%ld日",year,month,day];
+            [weakSelf.navigationController pushViewController:workController animated:YES];
+        }
+        else if ([weakSelf.controllerType isEqualToString:@"TaskCancel"])
+        {
+            TaskCancelController * taskCancel = [storyboard instantiateViewControllerWithIdentifier:@"taskCancel"];
+            taskCancel.navigationItem.title = [NSString stringWithFormat:@"%ld年%ld月%ld日",year,month,day];
+            [weakSelf.navigationController pushViewController:taskCancel animated:YES];
+        }
+        else if ([weakSelf.controllerType isEqualToString:@"TaskComplete"])
+        {
+            TaskCompleteController * taskComplete = [storyboard instantiateViewControllerWithIdentifier:@"taskComplete"];
+            taskComplete.navigationItem.title = [NSString stringWithFormat:@"%ld年%ld月%ld日",year,month,day];
+            [weakSelf.navigationController pushViewController:taskComplete animated:YES];
+        }
     };
     
     UITapGestureRecognizer * change = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(hiddenChooseDateView:)];

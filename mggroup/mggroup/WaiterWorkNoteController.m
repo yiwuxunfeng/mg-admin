@@ -7,15 +7,20 @@
 //
 
 #import "WaiterWorkNoteController.h"
-#import "CancelCell.h"
-#import "WorkingCell.h"
-#import "CompleteCell.h"
+#import "TaskCodeCell.h"
+#import "TaskNoCompleteCallCell.h"
+#import "TaskNoCompleteMenuCell.h"
+#import "TaskCompleteCallCell.h"
+#import "TaskCompleteMenuCell.h"
+#import "TaskCancelCallCell.h"
+#import "TaskCancelMenuCell.h"
 
 @interface WaiterWorkNoteController () <UITableViewDelegate,UITableViewDataSource>
 
 @property (nonatomic, strong) NSMutableArray * workNoteArray;
 
 @property (nonatomic, assign) NSInteger selectIndex;
+@property (nonatomic, assign) BOOL isCallWaiter;
 
 @end
 
@@ -27,6 +32,7 @@
     self.navigationItem.title = self.titleDate;
     
     self.selectIndex = 0;
+    self.isCallWaiter = YES;
      [self addTapToThreeButton];
     
     self.workingLabel.layer.borderColor = [UIColor lightGrayColor].CGColor;
@@ -83,36 +89,72 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (self.selectIndex == 0)
+    if (indexPath.row == 0)
     {
-        WorkingCell * cell = [tableView dequeueReusableCellWithIdentifier:@"working"];
+        TaskCodeCell * cell = [tableView dequeueReusableCellWithIdentifier:@"taskCode"];
         return cell;
     }
-    else if (self.selectIndex == 1)
+    else if (self.selectIndex == 0 && self.isCallWaiter == YES)
     {
-        CompleteCell * cell = [tableView dequeueReusableCellWithIdentifier:@"complete"];
+        TaskNoCompleteCallCell * cell = [tableView dequeueReusableCellWithIdentifier:@"taskNoCompleteCall"];
+        return cell;
+    }
+    else if (self.selectIndex == 0 && self.isCallWaiter == NO)
+    {
+        TaskNoCompleteMenuCell * cell = [tableView dequeueReusableCellWithIdentifier:@"taskNoCompleteMenu"];
+        return cell;
+    }
+    else if (self.selectIndex == 1 && self.isCallWaiter == YES)
+    {
+        TaskCompleteCallCell * cell = [tableView dequeueReusableCellWithIdentifier:@"taskCompleteCall"];
+        return cell;
+    }
+    else if (self.selectIndex == 1 && self.isCallWaiter == NO)
+    {
+        TaskCompleteMenuCell * cell = [tableView dequeueReusableCellWithIdentifier:@"taskCompleteMenu"];
+        return cell;
+    }
+    else if (self.selectIndex == 2 && self.isCallWaiter == YES)
+    {
+        TaskCancelCallCell * cell = [tableView dequeueReusableCellWithIdentifier:@"taskCancelCall"];
         return cell;
     }
     else
     {
-        CancelCell * cell = [tableView dequeueReusableCellWithIdentifier:@"cancel"];
+        TaskCancelMenuCell * cell = [tableView dequeueReusableCellWithIdentifier:@"taskCancelMenu"];
         return cell;
     }
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (self.selectIndex == 0)
+    if (indexPath.row == 0)
     {
-        return 155;
+        return 44;
     }
-    else if (self.selectIndex == 1)
+    else if (self.selectIndex == 0 && self.isCallWaiter == YES)
     {
-        return 240;
+        return 310;
+    }
+    else if (self.selectIndex == 0 && self.isCallWaiter == NO)
+    {
+        return 340;
+    }
+    else if (self.selectIndex == 1 && self.isCallWaiter == YES)
+    {
+        return 370;
+    }
+    else if (self.selectIndex == 1 && self.isCallWaiter == NO)
+    {
+        return 430;
+    }
+    else if (self.selectIndex == 2 && self.isCallWaiter == YES)
+    {
+        return 340;
     }
     else
     {
-        return 180;
+        return 250;
     }
 }
 

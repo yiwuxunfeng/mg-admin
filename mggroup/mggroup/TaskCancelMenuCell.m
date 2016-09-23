@@ -1,14 +1,14 @@
 //
-//  ComplainCell.m
-//  managerClient
+//  TaskCancelMenuCell.m
+//  mggroup
 //
-//  Created by 罗禹 on 16/6/7.
+//  Created by 罗禹 on 16/9/22.
 //  Copyright © 2016年 luoyu. All rights reserved.
 //
 
-#import "ComplainCell.h"
+#import "TaskCancelMenuCell.h"
 
-@implementation ComplainCell
+@implementation TaskCancelMenuCell
 
 - (void)awakeFromNib {
     [super awakeFromNib];

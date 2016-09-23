@@ -12,4 +12,6 @@
 
 @property (nonatomic, strong) NSDate * beforeDate;
 
+@property (nonatomic, copy) NSString * controllerType;
+
 @end

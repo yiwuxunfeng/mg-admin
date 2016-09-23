@@ -1,14 +1,14 @@
 //
-//  CompleteCell.m
+//  TaskCompleteMenuCell.m
 //  mggroup
 //
-//  Created by 罗禹 on 16/9/19.
+//  Created by 罗禹 on 16/9/22.
 //  Copyright © 2016年 luoyu. All rights reserved.
 //
 
-#import "CompleteCell.h"
+#import "TaskCompleteMenuCell.h"
 
-@implementation CompleteCell
+@implementation TaskCompleteMenuCell
 
 - (void)awakeFromNib {
     [super awakeFromNib];

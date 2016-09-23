@@ -1,14 +1,14 @@
 //
-//  WorkingCell.m
+//  TaskNoAcceptMenuCell.m
 //  mggroup
 //
-//  Created by 罗禹 on 16/9/19.
+//  Created by 罗禹 on 16/9/22.
 //  Copyright © 2016年 luoyu. All rights reserved.
 //
 
-#import "WorkingCell.h"
+#import "TaskNoAcceptMenuCell.h"
 
-@implementation WorkingCell
+@implementation TaskNoAcceptMenuCell
 
 - (void)awakeFromNib {
     [super awakeFromNib];

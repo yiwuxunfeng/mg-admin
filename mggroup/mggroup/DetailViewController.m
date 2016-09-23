@@ -25,9 +25,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
-    self.calendarLabel.backgroundColor = [UIColor whiteColor];
-    self.detailLabel.backgroundColor = [UIColor lightGrayColor];
+
     UITapGestureRecognizer * calendarTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(changeSelect:)];
     UITapGestureRecognizer * detailTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(changeSelect:)];
     [self.calendarLabel addGestureRecognizer:calendarTap];
@@ -38,15 +36,15 @@
 {
     if (tap.view == self.detailLabel)
     {
-        self.calendarLabel.backgroundColor = [UIColor lightGrayColor];
-        self.detailLabel.backgroundColor = [UIColor whiteColor];
+        self.calendarLabel.backgroundColor = [UIColor whiteColor];
+        self.detailLabel.backgroundColor = [UIColor lightGrayColor];
         self.calendarView.hidden = YES;
         self.detailView.hidden = NO;
     }
     else
     {
-        self.calendarLabel.backgroundColor = [UIColor whiteColor];
-        self.detailLabel.backgroundColor = [UIColor lightGrayColor];
+        self.calendarLabel.backgroundColor = [UIColor lightGrayColor];
+        self.detailLabel.backgroundColor = [UIColor whiteColor];
         self.calendarView.hidden = NO;
         self.detailView.hidden = YES;
     }
@@ -67,6 +65,7 @@
     {
         CalendarController * calendarController = [segue destinationViewController];
         calendarController.beforeDate = self.beforeDate;
+        calendarController.controllerType = @"WaiterDetail";
     }
 }
 
