@@ -1,14 +1,14 @@
 //
-//  RealTimeAssignCell.m
-//  managerClient
+//  TaskAreaChooseCell.m
+//  mggroup
 //
-//  Created by 罗禹 on 16/6/7.
+//  Created by 罗禹 on 16/9/26.
 //  Copyright © 2016年 luoyu. All rights reserved.
 //
 
-#import "RealTimeAssignCell.h"
+#import "TaskAreaChooseCell.h"
 
-@implementation RealTimeAssignCell
+@implementation TaskAreaChooseCell
 
 - (void)awakeFromNib {
     [super awakeFromNib];

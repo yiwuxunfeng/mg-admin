@@ -33,8 +33,12 @@
 		FCA6F6171D94C5520052F212 /* AssignOrderController.m in Sources */ = {isa = PBXBuildFile; fileRef = FCA6F6161D94C5520052F212 /* AssignOrderController.m */; };
 		FCA6F61A1D94D0FF0052F212 /* TaskCompleteController.m in Sources */ = {isa = PBXBuildFile; fileRef = FCA6F6191D94D0FF0052F212 /* TaskCompleteController.m */; };
 		FCA6F61D1D94D10C0052F212 /* TaskCancelController.m in Sources */ = {isa = PBXBuildFile; fileRef = FCA6F61C1D94D10C0052F212 /* TaskCancelController.m */; };
-		FCC1675B1D1B6D5D004DFBC4 /* RealTimeAssignController.m in Sources */ = {isa = PBXBuildFile; fileRef = FCC167581D1B6D5D004DFBC4 /* RealTimeAssignController.m */; };
-		FCC1675C1D1B6D5D004DFBC4 /* RealTimeAssignCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FCC1675A1D1B6D5D004DFBC4 /* RealTimeAssignCell.m */; };
+		FCB578FE1D990CBF00B3CA47 /* StatisticsController.m in Sources */ = {isa = PBXBuildFile; fileRef = FCB578FD1D990CBF00B3CA47 /* StatisticsController.m */; };
+		FCB579011D99158600B3CA47 /* StatisticsDetailController.m in Sources */ = {isa = PBXBuildFile; fileRef = FCB579001D99158600B3CA47 /* StatisticsDetailController.m */; };
+		FCB579041D99213F00B3CA47 /* AllTaskNumberCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FCB579031D99213F00B3CA47 /* AllTaskNumberCell.m */; };
+		FCB5790A1D99217600B3CA47 /* TaskAreaChooseCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FCB579091D99217600B3CA47 /* TaskAreaChooseCell.m */; };
+		FCB5790D1D99219000B3CA47 /* StatisticsDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FCB5790C1D99219000B3CA47 /* StatisticsDetailCell.m */; };
+		FCB78BB11D9A092900B59501 /* DateChooseBaseController.m in Sources */ = {isa = PBXBuildFile; fileRef = FCB78BB01D9A092900B59501 /* DateChooseBaseController.m */; };
 		FCC7BCC11D93B3CC00F0B900 /* TaskBaseController.m in Sources */ = {isa = PBXBuildFile; fileRef = FCC7BCC01D93B3CC00F0B900 /* TaskBaseController.m */; };
 		FCC7BCC41D93C13800F0B900 /* TaskNoCompleteController.m in Sources */ = {isa = PBXBuildFile; fileRef = FCC7BCC31D93C13800F0B900 /* TaskNoCompleteController.m */; };
 		FCC7BCC71D93CE1700F0B900 /* TaskCodeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FCC7BCC61D93CE1700F0B900 /* TaskCodeCell.m */; };
@@ -101,10 +105,18 @@
 		FCA6F6191D94D0FF0052F212 /* TaskCompleteController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TaskCompleteController.m; sourceTree = "<group>"; };
 		FCA6F61B1D94D10C0052F212 /* TaskCancelController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskCancelController.h; sourceTree = "<group>"; };
 		FCA6F61C1D94D10C0052F212 /* TaskCancelController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TaskCancelController.m; sourceTree = "<group>"; };
-		FCC167571D1B6D5D004DFBC4 /* RealTimeAssignController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RealTimeAssignController.h; sourceTree = "<group>"; };
-		FCC167581D1B6D5D004DFBC4 /* RealTimeAssignController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RealTimeAssignController.m; sourceTree = "<group>"; };
-		FCC167591D1B6D5D004DFBC4 /* RealTimeAssignCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RealTimeAssignCell.h; sourceTree = "<group>"; };
-		FCC1675A1D1B6D5D004DFBC4 /* RealTimeAssignCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RealTimeAssignCell.m; sourceTree = "<group>"; };
+		FCB578FC1D990CBF00B3CA47 /* StatisticsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StatisticsController.h; sourceTree = "<group>"; };
+		FCB578FD1D990CBF00B3CA47 /* StatisticsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StatisticsController.m; sourceTree = "<group>"; };
+		FCB578FF1D99158600B3CA47 /* StatisticsDetailController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StatisticsDetailController.h; sourceTree = "<group>"; };
+		FCB579001D99158600B3CA47 /* StatisticsDetailController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StatisticsDetailController.m; sourceTree = "<group>"; };
+		FCB579021D99213F00B3CA47 /* AllTaskNumberCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllTaskNumberCell.h; sourceTree = "<group>"; };
+		FCB579031D99213F00B3CA47 /* AllTaskNumberCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllTaskNumberCell.m; sourceTree = "<group>"; };
+		FCB579081D99217600B3CA47 /* TaskAreaChooseCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskAreaChooseCell.h; sourceTree = "<group>"; };
+		FCB579091D99217600B3CA47 /* TaskAreaChooseCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TaskAreaChooseCell.m; sourceTree = "<group>"; };
+		FCB5790B1D99219000B3CA47 /* StatisticsDetailCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StatisticsDetailCell.h; sourceTree = "<group>"; };
+		FCB5790C1D99219000B3CA47 /* StatisticsDetailCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StatisticsDetailCell.m; sourceTree = "<group>"; };
+		FCB78BAF1D9A092900B59501 /* DateChooseBaseController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DateChooseBaseController.h; sourceTree = "<group>"; };
+		FCB78BB01D9A092900B59501 /* DateChooseBaseController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DateChooseBaseController.m; sourceTree = "<group>"; };
 		FCC7BCBF1D93B3CC00F0B900 /* TaskBaseController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskBaseController.h; sourceTree = "<group>"; };
 		FCC7BCC01D93B3CC00F0B900 /* TaskBaseController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TaskBaseController.m; sourceTree = "<group>"; };
 		FCC7BCC21D93C13800F0B900 /* TaskNoCompleteController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskNoCompleteController.h; sourceTree = "<group>"; };
@@ -169,7 +181,7 @@
 				FC1C62831D124B9000BB8445 /* AppDelegate.m */,
 				FC1C62851D124B9000BB8445 /* ViewController.h */,
 				FC1C62861D124B9000BB8445 /* ViewController.m */,
-				FCC1675D1D1B6D6C004DFBC4 /* RealTimeAssign */,
+				FCC1675D1D1B6D6C004DFBC4 /* Statistics */,
 				FC1C62A61D12851400BB8445 /* Waiter */,
 				FC1C62A21D12717000BB8445 /* Task */,
 				FC1C62881D124B9000BB8445 /* Main.storyboard */,
@@ -270,15 +282,23 @@
 			name = Waiter;
 			sourceTree = "<group>";
 		};
-		FCC1675D1D1B6D6C004DFBC4 /* RealTimeAssign */ = {
+		FCC1675D1D1B6D6C004DFBC4 /* Statistics */ = {
 			isa = PBXGroup;
 			children = (
-				FCC167571D1B6D5D004DFBC4 /* RealTimeAssignController.h */,
-				FCC167581D1B6D5D004DFBC4 /* RealTimeAssignController.m */,
-				FCC167591D1B6D5D004DFBC4 /* RealTimeAssignCell.h */,
-				FCC1675A1D1B6D5D004DFBC4 /* RealTimeAssignCell.m */,
+				FCB578FC1D990CBF00B3CA47 /* StatisticsController.h */,
+				FCB578FD1D990CBF00B3CA47 /* StatisticsController.m */,
+				FCB578FF1D99158600B3CA47 /* StatisticsDetailController.h */,
+				FCB579001D99158600B3CA47 /* StatisticsDetailController.m */,
+				FCB579021D99213F00B3CA47 /* AllTaskNumberCell.h */,
+				FCB579031D99213F00B3CA47 /* AllTaskNumberCell.m */,
+				FCB579081D99217600B3CA47 /* TaskAreaChooseCell.h */,
+				FCB579091D99217600B3CA47 /* TaskAreaChooseCell.m */,
+				FCB5790B1D99219000B3CA47 /* StatisticsDetailCell.h */,
+				FCB5790C1D99219000B3CA47 /* StatisticsDetailCell.m */,
+				FCB78BAF1D9A092900B59501 /* DateChooseBaseController.h */,
+				FCB78BB01D9A092900B59501 /* DateChooseBaseController.m */,
 			);
-			name = RealTimeAssign;
+			name = Statistics;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -354,7 +374,6 @@
 			files = (
 				FCC7BCC41D93C13800F0B900 /* TaskNoCompleteController.m in Sources */,
 				FC1C62AC1D1286D400BB8445 /* WaiterDetailController.m in Sources */,
-				FCC1675B1D1B6D5D004DFBC4 /* RealTimeAssignController.m in Sources */,
 				FC1C62AF1D1286E800BB8445 /* CalendarController.m in Sources */,
 				FCA6F6171D94C5520052F212 /* AssignOrderController.m in Sources */,
 				FCC7BCDC1D93CFFC00F0B900 /* TaskCancelCallCell.m in Sources */,
@@ -368,6 +387,7 @@
 				FC1C628D1D124B9000BB8445 /* mggroup.xcdatamodeld in Sources */,
 				FCA338791D8FD73200ED8BFA /* WaiterWorkNoteController.m in Sources */,
 				FCC7BCD01D93CFA700F0B900 /* TaskNoCompleteCallCell.m in Sources */,
+				FCB78BB11D9A092900B59501 /* DateChooseBaseController.m in Sources */,
 				FCC7BCC71D93CE1700F0B900 /* TaskCodeCell.m in Sources */,
 				FCC7BCDF1D93D01000F0B900 /* TaskCancelMenuCell.m in Sources */,
 				FC8C4CB61D9505A5004C31F7 /* AssignTaskWaiterCell.m in Sources */,
@@ -378,11 +398,15 @@
 				FCDE87A91D8E70E1003ECBDB /* CreateWaiterController.m in Sources */,
 				FC1C629E1D12715800BB8445 /* StartTaskCell.m in Sources */,
 				FCDE87AC1D8E77CA003ECBDB /* CreateWaiterNextController.m in Sources */,
+				FCB5790D1D99219000B3CA47 /* StatisticsDetailCell.m in Sources */,
 				FC1C62A51D12850900BB8445 /* WaiterController.m in Sources */,
+				FCB578FE1D990CBF00B3CA47 /* StatisticsController.m in Sources */,
+				FCB579041D99213F00B3CA47 /* AllTaskNumberCell.m in Sources */,
+				FCB579011D99158600B3CA47 /* StatisticsDetailController.m in Sources */,
 				FCDE87A61D8E62C8003ECBDB /* WaiterChooseController.m in Sources */,
 				FC1C62841D124B9000BB8445 /* AppDelegate.m in Sources */,
+				FCB5790A1D99217600B3CA47 /* TaskAreaChooseCell.m in Sources */,
 				FC1C62C01D12A48A00BB8445 /* DateCell.m in Sources */,
-				FCC1675C1D1B6D5D004DFBC4 /* RealTimeAssignCell.m in Sources */,
 				FCC7BCC11D93B3CC00F0B900 /* TaskBaseController.m in Sources */,
 				FCC7BCCA1D93CF7A00F0B900 /* TaskNoAcceptCallCell.m in Sources */,
 				FCA338851D8FEB4C00ED8BFA /* DateChooseController.m in Sources */,

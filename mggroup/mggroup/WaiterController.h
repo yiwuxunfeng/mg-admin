@@ -10,4 +10,8 @@
 
 @interface WaiterController : ViewController
 
+@property (nonatomic, assign) BOOL isWaiterManage;
+
+- (void)changeLeftButton;
+
 @end

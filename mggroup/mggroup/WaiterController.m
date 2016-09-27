@@ -9,6 +9,7 @@
 #import "WaiterController.h"
 #import "WaiterDetailCell.h"
 #import "DetailViewController.h"
+#import "StatisticsDetailController.h"
 
 #define kScreenHeight   ([UIScreen mainScreen].bounds.size.height)
 #define kScreenWidth    ([UIScreen mainScreen].bounds.size.width)
@@ -16,10 +17,9 @@
 @interface WaiterController () <UITableViewDelegate,UITableViewDataSource>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-
 @property (strong, nonatomic) IBOutlet UIView *chooseView;
-
 @property (strong, nonatomic) IBOutlet UIView *shadowView;
+@property (strong, nonatomic) IBOutlet UIBarButtonItem *leftButton;
 
 @property (nonatomic, strong) UIBarButtonItem * rightButton;
 
@@ -49,6 +49,11 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hiddenChoose:) name:@"hiddenChoose" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showChoose:) name:@"showChoose" object:nil];
+}
+
+- (void)changeLeftButton
+{
+    self.navigationItem.leftBarButtonItem = nil;
 }
 
 - (void)tapRightButton
@@ -102,7 +107,7 @@
             case UIGestureRecognizerStateEnded:
             case UIGestureRecognizerStateCancelled:
             {
-                if (fabs(self.lastPoint.x) > kScreenWidth / 3 )
+                if (fabs(self.lastPoint.x) > kScreenWidth / 3)
                     [[NSNotificationCenter defaultCenter] postNotificationName:@"hiddenChoose" object:nil];
                 else
                     [[NSNotificationCenter defaultCenter] postNotificationName:@"showChoose" object:nil];
@@ -167,7 +172,18 @@
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
     NSDate *date = [dateFormatter dateFromString:@"2010-08-04 16:01:03"];
-    [self performSegueWithIdentifier:@"pushWaiterDetail" sender:date];
+    if (self.isWaiterManage == NO)
+    {
+        [self performSegueWithIdentifier:@"pushWaiterDetail" sender:date];
+    }
+    else
+    {
+        UIStoryboard * storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+        StatisticsDetailController * detail = [storyboard instantiateViewControllerWithIdentifier:@"StatisticsDetailController"];
+        detail.beforeDate = date;
+        detail.isWaiterStatistics = NO;
+        [self.navigationController pushViewController:detail animated:YES];
+    }
 }
 
 - (void)didReceiveMemoryWarning {
