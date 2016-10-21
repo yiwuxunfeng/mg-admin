@@ -13,6 +13,7 @@
 @property (nonatomic, strong) UITextField *textField;
 
 @property (nonatomic, strong) NSArray *tableArray;
+@property (nonatomic, assign) NSInteger selectIndex;
 
 - (void)hiddenTableView;
 

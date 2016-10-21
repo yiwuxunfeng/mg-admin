@@ -92,7 +92,7 @@
         self.datTypeLabel.backgroundColor = [UIColor whiteColor];
         
         self.chooseMonth.hidden = NO;
-        self.chooseDay.hidden = YES;
+        self.chooseDay.hidden = YES;    
         self.monthLabel.hidden = NO;
         self.dayLabel.hidden = YES;
     }

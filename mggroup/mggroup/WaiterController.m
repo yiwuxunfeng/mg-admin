@@ -7,23 +7,33 @@
 //
 
 #import "WaiterController.h"
-#import "WaiterDetailCell.h"
+#import "WaiterListCell.h"
 #import "DetailViewController.h"
 #import "StatisticsDetailController.h"
+#import "WaiterChooseController.h"
 
 #define kScreenHeight   ([UIScreen mainScreen].bounds.size.height)
 #define kScreenWidth    ([UIScreen mainScreen].bounds.size.width)
 
-@interface WaiterController () <UITableViewDelegate,UITableViewDataSource>
+@interface WaiterController () <UITableViewDelegate,UITableViewDataSource,MTRequestNetWorkDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) IBOutlet UIView *chooseView;
 @property (strong, nonatomic) IBOutlet UIView *shadowView;
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *leftButton;
 
+@property (nonatomic, strong) MBProgressHUD * hud;
 @property (nonatomic, strong) UIBarButtonItem * rightButton;
+@property (nonatomic, strong) WaiterChooseController * waiterChoose;
+@property (nonatomic, strong) MTWaiter * waiter;
 
 @property (nonatomic, assign) CGPoint lastPoint;
+
+@property (nonatomic, strong) NSMutableArray * waiterArray;
+@property (nonatomic, assign) NSInteger pageIndex;
+
+@property (nonatomic, strong) NSURLSessionTask * getWaiterListTask;
+@property (nonatomic, strong) NSURLSessionTask * getWaiterDetailTask;
 
 @end
 
@@ -32,7 +42,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    
     self.automaticallyAdjustsScrollViewInsets = NO;
+    self.pageIndex = 1;
     
     self.chooseView.layer.shadowColor = [UIColor clearColor].CGColor;
     self.chooseView.layer.shadowOffset = CGSizeMake(-5.0f, 0.0f);
@@ -49,6 +61,67 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hiddenChoose:) name:@"hiddenChoose" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showChoose:) name:@"showChoose" object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshData) name:@"refreshData" object:nil];
+    [self refreshDatas];
+    [self loadMoreDatas];
+}
+
+// 注册网络请求代理
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [[MTRequestNetwork defaultManager] registerDelegate:self];
+    [self refreshData];
+}
+
+// 注销网络请求代理
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [[MTRequestNetwork defaultManager] removeDelegate:self];
+}
+
+- (void)dealloc
+{
+    [[MTRequestNetwork defaultManager] cancleAllRequest];
+}
+
+- (void)refreshData
+{
+    self.pageIndex = 1;
+    [self NETWORK_getWaiterList];
+}
+
+// 上拉加载
+- (void)loadMoreDatas
+{
+    __weak typeof(self) weakSelf = self;
+    [self.tableView addLegendFooterWithRefreshingBlock:^{
+        [weakSelf.tableView.legendFooter endRefreshing];
+        weakSelf.pageIndex++ ;
+        [weakSelf NETWORK_getWaiterList];
+    }];
+}
+
+// 下拉刷新
+- (void)refreshDatas
+{
+    __weak typeof(self) weakSelf = self;
+    [self.tableView addLegendHeaderWithRefreshingBlock:^{
+        [weakSelf.tableView.legendHeader endRefreshing];
+        weakSelf.pageIndex = 1;
+        [weakSelf NETWORK_getWaiterList];
+    }];
+}
+
+- (NSMutableArray *)waiterArray
+{
+    if (_waiterArray == nil)
+    {
+        _waiterArray = [NSMutableArray arrayWithArray:[[AppDelegate sharedDelegate] arrayFromCoreData:@"MTWaiter" predicate:nil limit:NSIntegerMax offset:0 orderBy:nil]];
+    }
+    return _waiterArray;
 }
 
 - (void)changeLeftButton
@@ -134,7 +207,7 @@
 
 - (void)showChoose:(NSNotification *)object
 {
-    
+    self.waiterChoose.isChoose = NO;
     self.shadowView.hidden = NO;
     self.chooseView.layer.shadowColor = [UIColor blackColor].CGColor;
     
@@ -146,6 +219,146 @@
     self.rightButton.title = @"返回";
 }
 
+#pragma mark - network
+- (void)NETWORK_getWaiterList
+{
+    NSMutableDictionary * params = [NSMutableDictionary dictionaryWithDictionary:@{@"hotelCode":@"2",
+                              @"pageNo":[NSString stringWithFormat:@"%ld",self.pageIndex],
+                              @"pageCount":@"15"}]; // 获取服务员列表
+    if (self.waiterChoose.isChoose == YES)
+    {
+        if (self.waiterChoose.waiterArea.selectIndex != 0 && self.waiterChoose.waiterArea.selectIndex != NSNotFound)
+            [params setValue:[NSString stringWithFormat:@"%ld",self.waiterChoose.waiterArea.selectIndex] forKey:@"currentArea"];
+        if (self.waiterChoose.dapartment.selectIndex != 0 && self.waiterChoose.dapartment.selectIndex != NSNotFound)
+            [params setValue:[NSString stringWithFormat:@"%ld",self.waiterChoose.dapartment.selectIndex] forKey:@"waiterDep"];
+        if (self.waiterChoose.memberStatus.selectIndex != 0 && self.waiterChoose.memberStatus.selectIndex != NSNotFound)
+            [params setValue:[NSString stringWithFormat:@"%ld",self.waiterChoose.memberStatus.selectIndex] forKey:@"workingState"];
+        if (self.waiterChoose.nameText.text.length > 0)
+            [params setValue:self.waiterChoose.nameText.text forKey:@"name"];
+    }
+    self.getWaiterListTask = [[MTRequestNetwork defaultManager] POSTWithTopHead:@"http://"
+                                                                       webURL:URL_WAITERLIST
+                                                                       params:params
+                                                                   withByUser:YES];
+}
+
+- (void)RESULT_getWaiterListSucceed:(BOOL)succeed withResponseCode:(NSString *)code withMessage:(NSString *)msg withDatas:(NSMutableArray *)datas
+{
+    if (succeed)
+    {
+        if (self.pageIndex == 1)
+        {
+            [self.waiterArray removeAllObjects];
+        }
+        [self.waiterArray addObjectsFromArray:datas];
+        [self.tableView reloadData];
+        if (datas.count < 15)
+        {
+            [self.tableView.legendFooter noticeNoMoreData];
+        }
+    }
+    else
+    {
+        UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"提示信息" message:msg preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction * action = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:nil];
+        [alert addAction:action];
+        [self presentViewController:alert animated:YES completion:nil];
+    }
+}
+
+- (void)NETWORK_getWaiterDetail:(MTWaiter *)waiter
+{
+    NSDictionary * params = @{@"waiterId":waiter.waiterId};
+    self.getWaiterDetailTask = [[MTRequestNetwork defaultManager]POSTWithTopHead:@"http://"
+                                                                          webURL:URL_WAITER_DETAIL
+                                                                          params:params
+                                                                      withByUser:YES];
+}
+
+- (void)RESULT_getWaiterDetailSucceed:(BOOL)succeed withResponseCode:(NSString *)code withMessage:(NSString *)msg withDatas:(NSMutableArray *)datas
+{
+    if (succeed)
+    {
+        MTWaiter * waiter = datas[0];
+        NSDate *date = [NSDate dateWithTimeIntervalSince1970:[waiter.dutyIn doubleValue] / 1000];
+        if (self.isWaiterManage == NO)
+        {
+            [self performSegueWithIdentifier:@"pushWaiterDetail" sender:waiter];
+        }
+        else
+        {
+            UIStoryboard * storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+            StatisticsDetailController * detail = [storyboard instantiateViewControllerWithIdentifier:@"StatisticsDetailController"];
+            detail.beforeDate = date;
+            detail.isWaiterStatistics = NO;
+            detail.waiter = waiter;
+            [self.navigationController pushViewController:detail animated:YES];
+        }
+    }
+    else
+    {
+        UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"提示信息" message:msg preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction * action = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:nil];
+        [alert addAction:action];
+        [self presentViewController:alert animated:YES completion:nil];
+    }
+}
+
+// 请求开始 加载框
+- (void)startRequest:(MTNetwork *)manager
+{
+    if (!self.hud)
+    {
+        self.hud = [[MBProgressHUD alloc] initWithWindow:[AppDelegate sharedDelegate].window];
+        [[AppDelegate sharedDelegate].window addSubview:self.hud];
+        self.hud.labelText = @"正在加载";
+        [self.hud hide:NO];
+        [self.hud show:YES];
+    }
+    else
+    {
+        [self.hud hide:YES];
+        [self.hud removeFromSuperview];
+        self.hud = [[MBProgressHUD alloc] initWithWindow:[AppDelegate sharedDelegate].window];
+        [[AppDelegate sharedDelegate].window addSubview:self.hud];
+        self.hud.labelText = @"正在加载";
+        [self.hud hide:NO];
+        [self.hud show:YES];
+    }
+    [self.hud hide:YES];
+}
+
+// 网络请求成功回调
+- (void)pushResponseResultsSucceed:(NSURLSessionTask *)task responseCode:(NSString *)code withMessage:(NSString*)msg andData:(NSMutableArray*)datas
+{
+    [self.hud hide:YES];
+    [self.hud removeFromSuperview];
+    if (task == self.getWaiterListTask)
+    {
+        [self RESULT_getWaiterListSucceed:YES withResponseCode:code withMessage:msg withDatas:datas];
+    }
+    else if (task == self.getWaiterDetailTask)
+    {
+        [self RESULT_getWaiterDetailSucceed:YES withResponseCode:code withMessage:msg withDatas:datas];
+    }
+}
+
+// 网络请求失败回调
+- (void)pushResponseResultsFailing:(NSURLSessionTask *)task responseCode:(NSString *)code withMessage:(NSString *)msg
+{
+    [self.hud hide:YES];
+    [self.hud removeFromSuperview];
+    if (task == self.getWaiterListTask)
+    {
+        [self RESULT_getWaiterListSucceed:NO withResponseCode:code withMessage:msg withDatas:nil];
+    }
+    else if (task == self.getWaiterDetailTask)
+    {
+        [self RESULT_getWaiterDetailSucceed:NO withResponseCode:code withMessage:msg withDatas:nil];
+    }
+}
+
+#pragma mark - tableView Delegate
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return 1;
@@ -153,12 +366,28 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 5;
+    return self.waiterArray.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    WaiterDetailCell * cell = [tableView dequeueReusableCellWithIdentifier:@"waiterDetail"];
+    WaiterListCell * cell = [tableView dequeueReusableCellWithIdentifier:@"waiterList"];
+    MTWaiter * waiter = self.waiterArray[indexPath.row];
+    cell.waiterName.text = waiter.name;
+    cell.waiterDep.text = waiter.dep;
+    cell.waiterArea.text = waiter.currentArea;
+    if (waiter.dutyOut.length <= 0 || [waiter.dutyOut isEqualToString:@""] || waiter.dutyOut == nil)
+    {
+        cell.waiterState.text = @"激活中";
+        cell.waiterState.textColor = [UIColor greenColor];
+    }
+    else
+    {
+        cell.waiterState.text = @"屏蔽中";
+        cell.waiterState.textColor = [UIColor redColor];
+    }
+    if (waiter.facePic)
+        cell.facePicImage.image = [UIImage imageWithContentsOfFile:waiter.facePic];
     return cell;
 }
 
@@ -169,21 +398,8 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-    NSDate *date = [dateFormatter dateFromString:@"2010-08-04 16:01:03"];
-    if (self.isWaiterManage == NO)
-    {
-        [self performSegueWithIdentifier:@"pushWaiterDetail" sender:date];
-    }
-    else
-    {
-        UIStoryboard * storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-        StatisticsDetailController * detail = [storyboard instantiateViewControllerWithIdentifier:@"StatisticsDetailController"];
-        detail.beforeDate = date;
-        detail.isWaiterStatistics = NO;
-        [self.navigationController pushViewController:detail animated:YES];
-    }
+    self.waiter = self.waiterArray[indexPath.row];
+    [self NETWORK_getWaiterDetail:self.waiter];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -198,7 +414,14 @@
     if ([segue.identifier isEqualToString:@"pushWaiterDetail"])
     {
         DetailViewController * detailController = [segue destinationViewController];
-        detailController.beforeDate = sender;
+        MTWaiter * waiter = sender;
+        detailController.beforeDate = [NSDate dateWithTimeIntervalSince1970:[waiter.dutyIn doubleValue] / 1000];;
+        detailController.waiter = waiter;
+    }
+    else if ([segue.identifier isEqualToString:@"waiterChoose"])
+    {
+        WaiterChooseController * choose = [segue destinationViewController];
+        self.waiterChoose = choose;
     }
 }
 

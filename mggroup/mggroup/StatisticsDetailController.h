@@ -12,5 +12,7 @@
 
 @property (nonatomic, assign) BOOL isWaiterStatistics;
 @property (nonatomic, strong) NSDate * beforeDate;
+
+@property (nonatomic, strong) MTWaiter * waiter;
  
 @end

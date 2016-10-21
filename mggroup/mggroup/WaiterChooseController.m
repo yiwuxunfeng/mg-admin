@@ -7,13 +7,8 @@
 //
 
 #import "WaiterChooseController.h"
-#import "DropDownView.h"
 
 @interface WaiterChooseController ()
-
-@property (nonatomic, strong) DropDownView * waiterArea;
-@property (nonatomic, strong) DropDownView * dapartment;
-@property (nonatomic, strong) DropDownView * memberStatus;
 
 @end
 
@@ -22,6 +17,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.isChoose = NO;
+    self.searchButton.layer.cornerRadius = 5.0f;
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -30,16 +27,16 @@
     
     if (self.waiterArea == nil)
     {
-        self.waiterArea = [[DropDownView alloc]initWithFrame:CGRectMake(self.waiterAreaLabel.frame.origin.x + self.waiterAreaLabel.frame.size.width + 15, self.waiterAreaLabel.frame.origin.y - 5, self.view.frame.size.width - (self.waiterAreaLabel.frame.origin.x + self.waiterAreaLabel.frame.size.width + 15) - 15, 135)];
-        self.waiterArea.tableArray = @[@"区域1",@"区域2",@"区域3"];
+        self.waiterArea = [[DropDownView alloc]initWithFrame:CGRectMake(self.waiterAreaLabel.frame.origin.x + self.waiterAreaLabel.frame.size.width + 15, self.waiterAreaLabel.frame.origin.y - 5, self.view.frame.size.width - (self.waiterAreaLabel.frame.origin.x + self.waiterAreaLabel.frame.size.width + 15) - 15, 250)];
+        self.waiterArea.tableArray = @[@"全部",@"未设置",@"国际会展中心",@"椰林酒店",@"棕榈酒店",@"大王棕酒店",@"皇后棕酒店",@"菩提酒店",@"木棉酒店A",@"木棉酒店B",@"水乐园",@"水乐园前广场",@"海鲜广场",@"皇后广场",@"东南亚风情街",@"酒店主大堂"];
         self.waiterArea.textField.placeholder = @"请选择服务区域";
         [self.view addSubview:self.waiterArea];
     }
     
     if (self.dapartment == nil)
     {
-        self.dapartment = [[DropDownView alloc]initWithFrame:CGRectMake(self.departmentLabel.frame.origin.x + self.departmentLabel.frame.size.width + 15, self.departmentLabel.frame.origin.y - 5, self.view.frame.size.width - (self.departmentLabel.frame.origin.x + self.departmentLabel.frame.size.width + 15) - 15, 170)];
-        self.dapartment.tableArray = @[@"送餐部",@"服务部",@"管理",@"呼叫"];
+        self.dapartment = [[DropDownView alloc]initWithFrame:CGRectMake(self.departmentLabel.frame.origin.x + self.departmentLabel.frame.size.width + 15, self.departmentLabel.frame.origin.y - 5, self.view.frame.size.width - (self.departmentLabel.frame.origin.x + self.departmentLabel.frame.size.width + 15) - 15, 205)];
+        self.dapartment.tableArray = @[@"全部",@"总机",@"送餐部",@"前台",@"外勤现场"];
         self.dapartment.textField.placeholder = @"请选择所属部门";
         [self.view addSubview:self.dapartment];
     }
@@ -47,7 +44,7 @@
     if (self.memberStatus == nil)
     {
         self.memberStatus = [[DropDownView alloc]initWithFrame:CGRectMake(self.memberStatusLabel.frame.origin.x + self.memberStatusLabel.frame.size.width + 15, self.memberStatusLabel.frame.origin.y - 5, self.view.frame.size.width - (self.memberStatusLabel.frame.origin.x + self.memberStatusLabel.frame.size.width + 15) - 15, 135)];
-        self.memberStatus.tableArray = @[@"工作中",@"休息中",@"放假呢"];
+        self.memberStatus.tableArray = @[@"全部",@"激活中",@"屏蔽中"];
         self.memberStatus.textField.placeholder = @"请选择人员状态";
         [self.view addSubview:self.memberStatus];
     }
@@ -55,7 +52,9 @@
 
 - (IBAction)searchWaiter:(id)sender
 {
+    self.isChoose = YES;
     [[NSNotificationCenter defaultCenter] postNotificationName:@"hiddenChoose" object:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshData" object:nil];
     [self.view endEditing:YES];
     [self.waiterArea hiddenTableView];
     [self.dapartment hiddenTableView];

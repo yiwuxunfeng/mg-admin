@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "AFNetworking.h"
 
 @interface AppDelegate ()
 
@@ -17,6 +18,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    [[AFNetworkReachabilityManager sharedManager] startMonitoring];
     return YES;
 }
 
@@ -42,6 +44,11 @@
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     // Saves changes in the application's managed object context before the application terminates.
     [self saveContext];
+}
+
++ (AppDelegate *)sharedDelegate
+{
+    return (AppDelegate *)[UIApplication sharedApplication].delegate;
 }
 
 #pragma mark - Core Data stack
@@ -86,7 +93,7 @@
         error = [NSError errorWithDomain:@"YOUR_ERROR_DOMAIN" code:9999 userInfo:dict];
         // Replace this with code to handle the error appropriately.
         // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+        NSSLog(@"Unresolved error %@, %@", error, [error userInfo]);
         abort();
     }
     
@@ -122,6 +129,71 @@
             abort();
         }
     }
+}
+
+- (NSArray *)arrayFromCoreData:(NSString *)entityName
+                     predicate:(NSPredicate *)predicate
+                         limit:(NSUInteger)limit
+                        offset:(NSUInteger)offset
+                       orderBy:(NSArray *)sortDescriptors
+{
+    NSEntityDescription *entity = [NSEntityDescription entityForName:entityName inManagedObjectContext:self.managedObjectContext];
+    
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    [request setEntity:entity];
+    if (sortDescriptors != nil && sortDescriptors.count > 0)
+        [request setSortDescriptors:sortDescriptors];
+    if (predicate)
+        [request setPredicate:predicate];
+    
+    [request setFetchLimit:limit];
+    [request setFetchOffset:offset];
+    
+    NSError *error = nil;
+    NSArray *fetchObjects = [self.managedObjectContext executeFetchRequest:request error:&error];
+    
+    if (error)
+    {
+        NSLog(@"fetch request error=%@", error);
+        return nil;
+    }
+    
+    return fetchObjects;
+}
+
+/**
+ *  @abstract 向数据库中插入一条新建数据
+ *
+ */
+- (NSManagedObject *)insertIntoCoreData:(NSString *)entityName
+{
+    NSManagedObject *obj  = [NSEntityDescription insertNewObjectForEntityForName:entityName
+                                                          inManagedObjectContext:self.managedObjectContext];
+    return obj;
+}
+
+/**
+ *  @abstract 从数据库中删除一条数据
+ */
+- (void) deleteFromCoreData:(NSManagedObject *) obj
+{
+    [self.managedObjectContext deleteObject:obj];
+}
+
+- (MTWaiter *)findWaiterById:(NSString *)waiterId
+{
+    NSArray * array = [self arrayFromCoreData:@"MTWaiter" predicate:[NSPredicate predicateWithFormat:@"waiterId = %@",waiterId] limit:NSIntegerMax offset:0 orderBy:nil];
+    for (MTWaiter * waiter in array)
+    {
+        if ([waiter.waiterId isEqualToString:waiterId])
+        {
+            return waiter;
+        }
+    }
+    MTWaiter * waiter = (MTWaiter *)[self insertIntoCoreData:@"MTWaiter"];
+    waiter.waiterId = waiterId;
+    [self saveContext];
+    return waiter;
 }
 
 @end

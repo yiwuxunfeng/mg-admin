@@ -28,6 +28,7 @@
     self.waiterButton.titleLabel.numberOfLines = 2;
     [self.timeAreaButton setTitle:@"时间/区域\n数据统计" forState:UIControlStateNormal];
     [self.waiterButton setTitle:@"服务人员\n数据统计" forState:UIControlStateNormal];
+    
 }
 
 

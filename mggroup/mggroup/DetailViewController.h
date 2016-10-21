@@ -11,5 +11,6 @@
 @interface DetailViewController : ViewController
 
 @property (nonatomic, strong) NSDate * beforeDate;
+@property (nonatomic, strong) MTWaiter * waiter;
 
 @end

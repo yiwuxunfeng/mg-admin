@@ -14,8 +14,11 @@
 
 @property (strong, nonatomic) IBOutlet UIImageView *areaImageView;
 
-@property (strong, nonatomic) IBOutlet UICollectionView *collectionView;
-
 @property (strong, nonatomic) IBOutlet UIButton *commitButton;
+
+@property (strong, nonatomic) IBOutlet UITextField *waiterNumLabel;
+
+@property (nonatomic, strong) MTWaiter * waiter;
+@property (nonatomic, strong) UIImage * faceImage;
 
 @end

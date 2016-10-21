@@ -10,11 +10,12 @@
 #import "DropDownView.h"
 #import "CreateWaiterAreaCell.h"
 
-@interface CreateWaiterNextController () <UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout>
+@interface CreateWaiterNextController () <MTRequestNetWorkDelegate>
 
 @property (nonatomic, strong) DropDownView * department;
+@property (nonatomic, strong) MBProgressHUD * hud;
 
-@property (nonatomic, strong) NSMutableArray * areaTitleArray;
+@property (nonatomic, strong) NSURLSessionTask * createWaiterTask;
 
 @end
 
@@ -22,13 +23,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    self.collectionView.bounces = NO;
-    self.areaTitleArray = [NSMutableArray arrayWithCapacity:8];
-    for (NSInteger i = 1; i < 5; i++)
-    {
-        [self.areaTitleArray addObject:[NSString stringWithFormat:@"店铺%ld",i]];
-    }
     
     self.commitButton.layer.cornerRadius = 5.0f;
     
@@ -40,50 +34,160 @@
     [super viewDidAppear:animated];
     if (self.department == nil)
     {
-        self.department = [[DropDownView alloc]initWithFrame:CGRectMake(self.view.frame.size.width / 4,self.departmentLabel.frame.origin.y + self.departmentLabel.frame.size.height + 15,self.view.frame.size.width / 2, 170)];
-        self.department.tableArray = @[@"区域1",@"区域2",@"区域3",@"区域4"];
+        self.department = [[DropDownView alloc]initWithFrame:CGRectMake(self.view.frame.size.width / 4,self.departmentLabel.frame.origin.y + self.departmentLabel.frame.size.height + 15,self.view.frame.size.width / 2, 250)];
+        self.department.tableArray = @[@"全部",@"未设置",@"国际会展中心",@"椰林酒店",@"棕榈酒店",@"大王棕酒店",@"皇后棕酒店",@"菩提酒店",@"木棉酒店A",@"木棉酒店B",@"水乐园",@"水乐园前广场",@"海鲜广场",@"皇后广场",@"东南亚风情街",@"酒店主大堂"];
         self.department.textField.placeholder = @"请选负责区域";
         [self.view addSubview:self.department];
     }
 }
 
-- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+// 注册网络请求代理
+- (void)viewWillAppear:(BOOL)animated
 {
-    return self.areaTitleArray.count;
+    [super viewWillAppear:animated];
+    [[MTRequestNetwork defaultManager] registerDelegate:self];
 }
 
-- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
+// 注销网络请求代理
+- (void)viewWillDisappear:(BOOL)animated
 {
-    return  1;
+    [super viewWillDisappear:animated];
+    [[MTRequestNetwork defaultManager] removeDelegate:self];
 }
 
-- (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+- (void)dealloc
 {
-    CreateWaiterAreaCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"createWaiterArea" forIndexPath:indexPath];
-    cell.areaNameLabel.text = self.areaTitleArray[indexPath.row];
-    return cell;
+    [[MTRequestNetwork defaultManager] cancleAllRequest];
+    [[AppDelegate sharedDelegate] deleteFromCoreData:self.waiter];
 }
 
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
+#pragma mark - network delegate
+
+- (void)NETWORK_createWaiterByWaiter:(MTWaiter *)waiter
 {
-    return CGSizeMake(self.collectionView.frame.size.width / 2, self.collectionView.frame.size.height / 4);
+    [[AppDelegate sharedDelegate] deleteFromCoreData:self.waiter];
+    NSDictionary * params = @{@"workNum":waiter.workNum,
+                              @"hotelCode":@"2",
+                              @"deviceId":[Util getUUID],
+                              @"deviceToken":[Util getUUID],
+                              @"name":waiter.name,
+                              @"gender":waiter.gender,
+                              @"dutyLevel":@"1",
+                              @"incharge":@"1",
+                              @"gender":waiter.gender,
+                              @"dep":waiter.dep,
+                              @"dutyIn":[Util getTimeNow],
+                              @"currentArea":waiter.currentArea}; // 获取服务员详情
+    self.createWaiterTask = [[MTRequestNetwork defaultManager] POSTWithTopHead:@"http://"
+                                                                        webURL:URL_CREATEWAITER
+                                                                        params:params
+                                                                    withByUser:YES];
 }
 
-- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
+- (void)RESULT_createWaiterSucceed:(BOOL)succeed withResponseCode:(NSString *)code withMessage:(NSString *)msg withDatas:(NSMutableArray *)datas
 {
-    return UIEdgeInsetsMake(0, 0, 0, 0);
+    if (succeed)
+    {
+        if (datas.count > 0)
+        {
+            UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"提示信息" message:@"创建服务员成功" preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction * action = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                
+            }];
+            [alert addAction:action];
+            [self presentViewController:alert animated:YES completion:nil];
+        }
+        else
+        {
+            UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"提示信息" message:@"创建服务员失败，请重新尝试" preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction * action = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:nil];
+            [alert addAction:action];
+            [self presentViewController:alert animated:YES completion:nil];
+        }
+    }
+    else
+    {
+        UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"提示信息" message:@"创建服务员失败，请重新尝试" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction * action = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:nil];
+        [alert addAction:action];
+        [self presentViewController:alert animated:YES completion:nil];
+    }
+}
+
+// 请求开始 加载框
+- (void)startRequest:(MTNetwork *)manager
+{
+    if (!self.hud)
+    {
+        self.hud = [[MBProgressHUD alloc] initWithWindow:[AppDelegate sharedDelegate].window];
+        [[AppDelegate sharedDelegate].window addSubview:self.hud];
+        self.hud.labelText = @"正在加载";
+        [self.hud hide:NO];
+        [self.hud show:YES];
+    }
+    else
+    {
+        [self.hud hide:YES];
+        [self.hud removeFromSuperview];
+        self.hud = [[MBProgressHUD alloc] initWithWindow:[AppDelegate sharedDelegate].window];
+        [[AppDelegate sharedDelegate].window addSubview:self.hud];
+        self.hud.labelText = @"正在加载";
+        [self.hud hide:NO];
+        [self.hud show:YES];
+    }
+    [self.hud hide:YES];
+}
+
+// 网络请求成功回调
+- (void)pushResponseResultsSucceed:(NSURLSessionTask *)task responseCode:(NSString *)code withMessage:(NSString*)msg andData:(NSMutableArray*)datas
+{
+    [self.hud hide:YES];
+    [self.hud removeFromSuperview];
+    if (task == self.createWaiterTask)
+    {
+        [self RESULT_createWaiterSucceed:YES withResponseCode:code withMessage:msg withDatas:datas];
+    }
+}
+
+// 网络请求失败回调
+- (void)pushResponseResultsFailing:(NSURLSessionTask *)task responseCode:(NSString *)code withMessage:(NSString *)msg
+{
+    [self.hud hide:YES];
+    [self.hud removeFromSuperview];
+    if (task == self.createWaiterTask)
+    {
+        [self RESULT_createWaiterSucceed:NO withResponseCode:code withMessage:msg withDatas:nil];
+    }
 }
 
 - (IBAction)commitWaiter:(id)sender
 {
-    UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"提示信息" message:@"服务员操作成功" preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction * action = [UIAlertAction actionWithTitle:@"确认" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [self.navigationController popToRootViewControllerAnimated:YES];
+    if (self.department.textField.text.length <= 0 || self.waiterNumLabel.text.length <= 0)
+    {
+        UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"消息提示" message:@"请填写完整信息" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction * action = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:nil];
+        [alert addAction:action];
+        [self presentViewController:alert animated:YES completion:nil];
+        return;
+    }
+    self.waiter.currentArea = [NSString stringWithFormat:@"%ld",self.department.selectIndex];
+    self.waiter.workNum = self.waiterNumLabel.text;
+    
+    UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"提示信息" message:@"确定要添加该服务员吗？" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction * action1 = [UIAlertAction actionWithTitle:@"确认" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [self NETWORK_createWaiterByWaiter:self.waiter];
     }];
-    [alert addAction:action];
+    UIAlertAction * action2 = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
+    [alert addAction:action1];
+    [alert addAction:action2];
     [self presentViewController:alert animated:YES completion:nil];
 }
 
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
+{
+    [self.view endEditing:YES];
+    [self.department hiddenTableView];
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

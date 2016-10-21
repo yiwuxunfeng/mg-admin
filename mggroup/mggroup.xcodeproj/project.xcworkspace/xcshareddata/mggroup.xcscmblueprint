@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "422AE02A0156B141C2D8EE2C010B8C811928CFB3",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "422AE02A0156B141C2D8EE2C010B8C811928CFB3" : 9223372036854775807,
+    "B9615293BCFCA4A4C58D10045BE842502C3794D9" : 9223372036854775807
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "B723F41F-6647-4C96-962B-8E823532661B",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "422AE02A0156B141C2D8EE2C010B8C811928CFB3" : "mg-admin\/",
+    "B9615293BCFCA4A4C58D10045BE842502C3794D9" : "Desktop\/mg-manager-new\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "mggroup",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "mggroup\/mggroup.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/yiwuxunfeng\/mg-admin.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "422AE02A0156B141C2D8EE2C010B8C811928CFB3"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/suzic\/mg-manager.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "B9615293BCFCA4A4C58D10045BE842502C3794D9"
+    }
+  ]
+}

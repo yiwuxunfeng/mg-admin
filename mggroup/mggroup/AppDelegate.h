@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
+#import "MTWaiter+CoreDataClass.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
@@ -20,6 +21,18 @@
 - (void)saveContext;
 - (NSURL *)applicationDocumentsDirectory;
 
+- (NSArray *)arrayFromCoreData:(NSString *)entityName
+                     predicate:(NSPredicate *)predicate
+                         limit:(NSUInteger)limit
+                        offset:(NSUInteger)offset
+                       orderBy:(NSArray *)sortDescriptors;
+
+- (NSManagedObject *)insertIntoCoreData:(NSString *)entityName;
+
+- (void)deleteFromCoreData:(NSManagedObject *) obj;
+- (MTWaiter *)findWaiterById:(NSString *)waiterId;
+
++ (AppDelegate *)sharedDelegate;
 
 @end
 

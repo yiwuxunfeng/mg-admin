@@ -1,0 +1,80 @@
+//
+//  PrefixHeader.pch
+//  mggroup
+//
+//  Created by 罗禹 on 16/10/12.
+//  Copyright © 2016年 luoyu. All rights reserved.
+//
+
+#ifndef PrefixHeader_pch
+#define PrefixHeader_pch
+
+// Include any system framework and library headers here that should be included in all compilation units.
+// You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
+
+#import <Availability.h>
+
+#ifndef __IPHONE_7_0
+#warning "This project uses features only available in iOS SDK 7.0 and later."
+#endif
+
+#ifdef __OBJC__
+#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
+#import <CoreGraphics/CoreGraphics.h>
+#import <CoreData/CoreData.h>
+#import "AppDelegate.h"
+#import "MTRequestNetwork.h"
+#import "MBProgressHUD.h"
+#import "NetworkUrl.h"
+#import "Util.h"
+#import "MTWaiter+CoreDataClass.h"
+#import "MJRefresh.h"
+
+#endif
+
+//c， oc通用断言
+#ifdef __OBJC__
+#define Assert NSAssert
+#else
+#include <assert.h>
+#define Assert assert
+#endif
+
+/*!
+ 定义安全的空语句
+ */
+#define SafeEmptyStatement       do {}while(0)
+
+//通用的debug log开关
+#if DevelopmentEnvironment
+#define ShowDebugLogs   1
+#else
+#define ShowDebugLogs   0
+#endif // DevelopmentEnvironmen
+
+#if ShowDebugLogs
+#ifdef __OBJC__
+#define DebugLog(fmt, ...) NSLog((@"%s %s %3d:\n" fmt), __FILE__, __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__)
+#else
+#if 1
+#define DebugLog(...) (printf("%s %s %s [%s] %3d:\n", __DATE__, __TIME__,  _FILE_, __PRETTY_FUNCTION__, __LINE__), printf(__VA_ARGS__), printf("\n"))
+#else
+#define DebugLog(...)   SafeEmptyStatement
+#endif
+#endif
+#else
+#define DebugLog(...)   SafeEmptyStatement
+#endif //ShowDebugLogs
+
+#ifdef DEBUG
+
+#define NSSLog(FORMAT, ...) fprintf(stderr,"%s:%d\t%s\n",[[[NSString stringWithUTF8String:__FILE__] lastPathComponent] UTF8String], __LINE__, [[NSString stringWithFormat:FORMAT, ##__VA_ARGS__] UTF8String]);
+
+#else
+
+#define NSSLog(...)
+
+#endif
+
+#endif /* PrefixHeader_pch */

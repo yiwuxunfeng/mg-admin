@@ -36,17 +36,22 @@
 {
     if (tap.view == self.detailLabel)
     {
+        self.detailLabel.backgroundColor = [UIColor colorWithRed:41 / 255.0f green:139 / 255.0f blue:255 / 255.0f alpha:1];
         self.calendarLabel.backgroundColor = [UIColor whiteColor];
-        self.detailLabel.backgroundColor = [UIColor lightGrayColor];
-        self.calendarView.hidden = YES;
+        self.detailLabel.textColor = [UIColor whiteColor];
+        self.calendarLabel.textColor = [UIColor colorWithRed:41 / 255.0f green:139 / 255.0f blue:255 / 255.0f alpha:1];
         self.detailView.hidden = NO;
+        self.calendarView.hidden = YES;
     }
     else
     {
-        self.calendarLabel.backgroundColor = [UIColor lightGrayColor];
         self.detailLabel.backgroundColor = [UIColor whiteColor];
-        self.calendarView.hidden = NO;
+        self.calendarLabel.backgroundColor = [UIColor colorWithRed:41 / 255.0f green:139 / 255.0f blue:255 / 255.0f alpha:1];
+        self.detailLabel.textColor = [UIColor colorWithRed:41 / 255.0f green:139 / 255.0f blue:255 / 255.0f alpha:1];
+        self.calendarLabel.textColor = [UIColor whiteColor];
         self.detailView.hidden = YES;
+        self.calendarView.hidden = NO;
+        
     }
 }
 

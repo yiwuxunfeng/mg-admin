@@ -40,6 +40,7 @@
     if(self){
         _showList = NO;
         
+        _selectIndex = NSNotFound;
         _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 30, frame.size.width, 0)];
         _tableView.delegate = self;
         _tableView.dataSource = self;
@@ -149,6 +150,7 @@
     CGRect frame = self.tableView.frame;
     frame.size.height = 0;
     self.tableView.frame = frame;
+    self.selectIndex = indexPath.row;
 }
 
 - (void)hiddenTableView

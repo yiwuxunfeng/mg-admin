@@ -25,6 +25,10 @@
     
     self.isFirstPage = YES;
     self.navigationController.title = @"员工信息";
+    
+    self.editButton.layer.cornerRadius = 5.0f;
+    self.pageButton.layer.cornerRadius = 5.0f;
+    self.deleteButton.layer.cornerRadius = 5.0f;
 }
 
 

@@ -16,8 +16,6 @@
 
 @property (strong, nonatomic) IBOutlet UITextField *phoneText;
 
-@property (strong, nonatomic) IBOutlet UITextField *numberText;
-
 @property (strong, nonatomic) IBOutlet UILabel *departmentLabel;
 
 @end
