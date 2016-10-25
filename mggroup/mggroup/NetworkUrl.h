@@ -15,4 +15,6 @@
 
 #define URL_WAITER_DETAIL @"/hotelservice/manage/manager/waiter_info.json"
 
+#define URL_UPDATEWAITER @"/hotelservice/manage/manager/updateWaiter.json"
+
 #endif /* NetworkUrl_h */

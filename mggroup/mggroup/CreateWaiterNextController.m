@@ -16,6 +16,7 @@
 @property (nonatomic, strong) MBProgressHUD * hud;
 
 @property (nonatomic, strong) NSURLSessionTask * createWaiterTask;
+@property (nonatomic, strong) NSURLSessionTask * updateWaiterTask;
 
 @end
 
@@ -25,20 +26,25 @@
     [super viewDidLoad];
     
     self.commitButton.layer.cornerRadius = 5.0f;
-    
-    self.navigationController.title = @"创建服务员";
+    self.navigationItem.title = @"创建服务员";
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+}
+
+- (void)viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
     if (self.department == nil)
     {
         self.department = [[DropDownView alloc]initWithFrame:CGRectMake(self.view.frame.size.width / 4,self.departmentLabel.frame.origin.y + self.departmentLabel.frame.size.height + 15,self.view.frame.size.width / 2, 250)];
-        self.department.tableArray = @[@"全部",@"未设置",@"国际会展中心",@"椰林酒店",@"棕榈酒店",@"大王棕酒店",@"皇后棕酒店",@"菩提酒店",@"木棉酒店A",@"木棉酒店B",@"水乐园",@"水乐园前广场",@"海鲜广场",@"皇后广场",@"东南亚风情街",@"酒店主大堂"];
+        self.department.tableArray = @[@"全区域",@"国际会展中心",@"椰林酒店",@"棕榈酒店",@"大王棕酒店",@"皇后棕酒店",@"菩提酒店",@"木棉酒店A",@"木棉酒店B",@"水乐园",@"水乐园前广场",@"海鲜广场",@"皇后广场",@"东南亚风情街",@"酒店主大堂"];
         self.department.textField.placeholder = @"请选负责区域";
         [self.view addSubview:self.department];
     }
+    self.departmentLabel.text = [self.waiter.currentArea isEqualToString:@"0"] ? @"全区域" :self.waiter.currentArea;
 }
 
 // 注册网络请求代理
@@ -65,8 +71,8 @@
 
 - (void)NETWORK_createWaiterByWaiter:(MTWaiter *)waiter
 {
-    [[AppDelegate sharedDelegate] deleteFromCoreData:self.waiter];
-    NSDictionary * params = @{@"workNum":waiter.workNum,
+    [[AppDelegate sharedDelegate] deleteFromCoreData:waiter];
+    NSMutableDictionary * params = [NSMutableDictionary dictionaryWithDictionary:@{@"workNum":waiter.workNum,
                               @"hotelCode":@"2",
                               @"deviceId":[Util getUUID],
                               @"deviceToken":[Util getUUID],
@@ -74,10 +80,10 @@
                               @"gender":waiter.gender,
                               @"dutyLevel":@"1",
                               @"incharge":@"1",
-                              @"gender":waiter.gender,
+                              @"phone":waiter.cellPhone,
                               @"dep":waiter.dep,
                               @"dutyIn":[Util getTimeNow],
-                              @"currentArea":waiter.currentArea}; // 获取服务员详情
+                              @"currentArea":waiter.currentArea}];
     self.createWaiterTask = [[MTRequestNetwork defaultManager] POSTWithTopHead:@"http://"
                                                                         webURL:URL_CREATEWAITER
                                                                         params:params
@@ -90,9 +96,13 @@
     {
         if (datas.count > 0)
         {
+            MTWaiter * waiter = datas[0];
             UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"提示信息" message:@"创建服务员成功" preferredStyle:UIAlertControllerStyleAlert];
             UIAlertAction * action = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-                
+                [SaveHeadImage saveHeadImageByWaiterId:waiter.waiterId andWithImage:self.faceImage];
+                waiter.facePic = @"1";
+                [[AppDelegate sharedDelegate] saveContext];
+                [self.navigationController popToRootViewControllerAnimated:YES];
             }];
             [alert addAction:action];
             [self presentViewController:alert animated:YES completion:nil];
@@ -108,6 +118,51 @@
     else
     {
         UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"提示信息" message:@"创建服务员失败，请重新尝试" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction * action = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:nil];
+        [alert addAction:action];
+        [self presentViewController:alert animated:YES completion:nil];
+    }
+}
+
+- (void)NETWORK_updateWaiterByWaiter:(MTWaiter *)waiter
+{
+    [[AppDelegate sharedDelegate] deleteFromCoreData:self.waiter];
+    NSDictionary * params = @{@"waiterId":waiter.waiterId,
+                              @"name":waiter.name,
+                              @"gender":waiter.gender,
+                              @"dep":waiter.dep,
+                              @"phone":waiter.cellPhone,
+                              @"currentArea":waiter.currentArea}; // 获取服务员详情
+    self.updateWaiterTask = [[MTRequestNetwork defaultManager] POSTWithTopHead:@"http://"
+                                                                        webURL:URL_UPDATEWAITER
+                                                                        params:params
+                                                                    withByUser:YES];
+}
+
+- (void)RESULT_updateWaiterSucceed:(BOOL)succeed withResponseCode:(NSString *)code withMessage:(NSString *)msg withDatas:(NSMutableArray *)datas
+{
+    if (succeed)
+    {
+        if (datas.count > 0)
+        {
+            UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"提示信息" message:@"修改服务员信息成功" preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction * action = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                [self.navigationController popToRootViewControllerAnimated:YES];
+            }];
+            [alert addAction:action];
+            [self presentViewController:alert animated:YES completion:nil];
+        }
+        else
+        {
+            UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"提示信息" message:@"修改服务员信息失败" preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction * action = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:nil];
+            [alert addAction:action];
+            [self presentViewController:alert animated:YES completion:nil];
+        }
+    }
+    else
+    {
+        UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"提示信息" message:@"修改服务员信息失败" preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction * action = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:nil];
         [alert addAction:action];
         [self presentViewController:alert animated:YES completion:nil];
@@ -147,6 +202,10 @@
     {
         [self RESULT_createWaiterSucceed:YES withResponseCode:code withMessage:msg withDatas:datas];
     }
+    else if (task == self.updateWaiterTask)
+    {
+        [self RESULT_updateWaiterSucceed:YES withResponseCode:code withMessage:msg withDatas:datas];
+    }
 }
 
 // 网络请求失败回调
@@ -158,11 +217,15 @@
     {
         [self RESULT_createWaiterSucceed:NO withResponseCode:code withMessage:msg withDatas:nil];
     }
+    else if (task == self.updateWaiterTask)
+    {
+        [self RESULT_updateWaiterSucceed:NO withResponseCode:code withMessage:msg withDatas:nil];
+    }
 }
 
 - (IBAction)commitWaiter:(id)sender
 {
-    if (self.department.textField.text.length <= 0 || self.waiterNumLabel.text.length <= 0)
+    if (self.department.textField.text.length <= 0)
     {
         UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"消息提示" message:@"请填写完整信息" preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction * action = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:nil];
@@ -170,12 +233,19 @@
         [self presentViewController:alert animated:YES completion:nil];
         return;
     }
-    self.waiter.currentArea = [NSString stringWithFormat:@"%ld",self.department.selectIndex];
-    self.waiter.workNum = self.waiterNumLabel.text;
+    self.waiter.currentArea = self.department.selectIndex == 1 ? @"0" : self.department.textField.text ;
     
-    UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"提示信息" message:@"确定要添加该服务员吗？" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"提示信息" message:@"确定要提交改服务员信息吗" preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction * action1 = [UIAlertAction actionWithTitle:@"确认" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [self NETWORK_createWaiterByWaiter:self.waiter];
+        if (self.isCreate == YES)
+        {
+            [self NETWORK_createWaiterByWaiter:self.waiter];
+        }
+        else
+        {
+            [self NETWORK_updateWaiterByWaiter:self.waiter];
+        }
+        
     }];
     UIAlertAction * action2 = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
     [alert addAction:action1];

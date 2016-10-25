@@ -8,6 +8,7 @@
 
 #import "DetailViewController.h"
 #import "CalendarController.h"
+#import "WaiterDetailController.h"
 
 @interface DetailViewController ()
 
@@ -71,6 +72,11 @@
         CalendarController * calendarController = [segue destinationViewController];
         calendarController.beforeDate = self.beforeDate;
         calendarController.controllerType = @"WaiterDetail";
+    }
+    else if([segue.identifier isEqualToString:@"waiterData"])
+    {
+        WaiterDetailController * waiterDetail = [segue destinationViewController];
+        waiterDetail.waiter = self.waiter;
     }
 }
 

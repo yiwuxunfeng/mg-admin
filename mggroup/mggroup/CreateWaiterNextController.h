@@ -16,9 +16,8 @@
 
 @property (strong, nonatomic) IBOutlet UIButton *commitButton;
 
-@property (strong, nonatomic) IBOutlet UITextField *waiterNumLabel;
-
 @property (nonatomic, strong) MTWaiter * waiter;
 @property (nonatomic, strong) UIImage * faceImage;
+@property (nonatomic, assign) BOOL isCreate;
 
 @end

@@ -13,7 +13,6 @@
 
 @interface WaiterDetailFirstController ()<UITableViewDelegate,UITableViewDataSource>
 
-@property (nonatomic, strong) NSMutableArray * waiterArray;
 @property (nonatomic, strong) NSMutableArray * titleArray;
 
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *tableViewHeight;
@@ -30,7 +29,11 @@
     self.tableView.layer.borderWidth = 1.0f;
     self.tableView.layer.borderColor = [UIColor lightGrayColor].CGColor;
     self.titleArray = [NSMutableArray arrayWithArray:@[@"姓名",@"性别",@"电话",@"所属部门",@"员工编号"]];
-    self.waiterArray = [NSMutableArray arrayWithArray:@[@"lalal",@"男",@"1294719851798541",@"服务部",@"325235"]];
+    
+    if (self.waiter.facePic)
+    {
+        self.headImageView.image = [SaveHeadImage getHeadImageByWaiterId:self.waiter.waiterId];
+    }
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -40,14 +43,52 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return self.waiterArray.count;
+    return 5;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     WaiterDetailCell * cell = [tableView dequeueReusableCellWithIdentifier:@"waiterDetail"];
     cell.waiterTitleLabel.text = self.titleArray[indexPath.row];
-    cell.waiterContentLabel.text = self.waiterArray[indexPath.row];
+    switch (indexPath.row)
+    {
+        case 0:
+            cell.waiterContentLabel.text = self.waiter.name;
+            break;
+        case 1:
+            cell.waiterContentLabel.text = [self.waiter.gender isEqualToString:@"1"] ? @"男" : @"女";
+            break;
+        case 2:
+            cell.waiterContentLabel.text = self.waiter.cellPhone;
+            break;
+        case 3:
+        {
+            NSString * dep;
+            if ([self.waiter.dep isEqualToString:@"1"])
+            {
+                dep = @"总机";
+            }
+            else if ([self.waiter.dep isEqualToString:@"2"])
+            {
+                dep = @"送餐部";
+            }
+            else if ([self.waiter.dep isEqualToString:@"3"])
+            {
+                dep = @"前台";
+            }
+            else if ([self.waiter.dep isEqualToString:@"4"])
+            {
+                dep = @"外勤现场";
+            }
+            cell.waiterContentLabel.text = dep;
+            break;
+        }
+        case 4:
+            cell.waiterContentLabel.text = self.waiter.workNum;
+            break;
+        default:
+            break;
+    }
     return cell;
 }
 

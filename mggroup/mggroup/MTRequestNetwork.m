@@ -155,7 +155,7 @@
     NSSLog(@"header ========= %@",header);
     NSString *responseCode = [header objectForKey:@"mymhotel-status"];
     NSString *responseMsg = [header objectForKey:@"mymhotel-message"];
-    NSLog(@"msg ========== %@",responseMsg);
+    NSSLog(@"msg ========== %@",responseMsg);
     NSSLog(@"params ========= %@",params);
     // 无响应：网络连接失败
     if (responseCode == NULL)

@@ -23,6 +23,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreGraphics/CoreGraphics.h>
 #import <CoreData/CoreData.h>
+#import <QuartzCore/QuartzCore.h>
 #import "AppDelegate.h"
 #import "MTRequestNetwork.h"
 #import "MBProgressHUD.h"
@@ -30,6 +31,7 @@
 #import "Util.h"
 #import "MTWaiter+CoreDataClass.h"
 #import "MJRefresh.h"
+#import "SaveHeadImage.h"
 
 #endif
 

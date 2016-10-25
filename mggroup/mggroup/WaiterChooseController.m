@@ -28,7 +28,7 @@
     if (self.waiterArea == nil)
     {
         self.waiterArea = [[DropDownView alloc]initWithFrame:CGRectMake(self.waiterAreaLabel.frame.origin.x + self.waiterAreaLabel.frame.size.width + 15, self.waiterAreaLabel.frame.origin.y - 5, self.view.frame.size.width - (self.waiterAreaLabel.frame.origin.x + self.waiterAreaLabel.frame.size.width + 15) - 15, 250)];
-        self.waiterArea.tableArray = @[@"全部",@"未设置",@"国际会展中心",@"椰林酒店",@"棕榈酒店",@"大王棕酒店",@"皇后棕酒店",@"菩提酒店",@"木棉酒店A",@"木棉酒店B",@"水乐园",@"水乐园前广场",@"海鲜广场",@"皇后广场",@"东南亚风情街",@"酒店主大堂"];
+        self.waiterArea.tableArray = @[@"全部",@"全区域",@"国际会展中心",@"椰林酒店",@"棕榈酒店",@"大王棕酒店",@"皇后棕酒店",@"菩提酒店",@"木棉酒店A",@"木棉酒店B",@"水乐园",@"水乐园前广场",@"海鲜广场",@"皇后广场",@"东南亚风情街",@"酒店主大堂"];
         self.waiterArea.textField.placeholder = @"请选择服务区域";
         [self.view addSubview:self.waiterArea];
     }
@@ -43,8 +43,8 @@
     
     if (self.memberStatus == nil)
     {
-        self.memberStatus = [[DropDownView alloc]initWithFrame:CGRectMake(self.memberStatusLabel.frame.origin.x + self.memberStatusLabel.frame.size.width + 15, self.memberStatusLabel.frame.origin.y - 5, self.view.frame.size.width - (self.memberStatusLabel.frame.origin.x + self.memberStatusLabel.frame.size.width + 15) - 15, 135)];
-        self.memberStatus.tableArray = @[@"全部",@"激活中",@"屏蔽中"];
+        self.memberStatus = [[DropDownView alloc]initWithFrame:CGRectMake(self.memberStatusLabel.frame.origin.x + self.memberStatusLabel.frame.size.width + 15, self.memberStatusLabel.frame.origin.y - 5, self.view.frame.size.width - (self.memberStatusLabel.frame.origin.x + self.memberStatusLabel.frame.size.width + 15) - 15, 205)];
+        self.memberStatus.tableArray = @[@"全部",@"空闲中",@"忙碌中",@"待命中",@"未上班",@"屏蔽中"];
         self.memberStatus.textField.placeholder = @"请选择人员状态";
         [self.view addSubview:self.memberStatus];
     }

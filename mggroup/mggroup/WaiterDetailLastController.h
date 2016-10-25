@@ -10,10 +10,10 @@
 
 @interface WaiterDetailLastController : UIViewController
 
-@property (strong, nonatomic) IBOutlet UICollectionView *collectionView;
-
 @property (strong, nonatomic) IBOutlet UIImageView *waiterAreaImageView;
 
 @property (strong, nonatomic) IBOutlet UILabel *waiterAreaLabel;
+
+@property (nonatomic, strong) MTWaiter * waiter;
 
 @end

@@ -18,4 +18,8 @@
 
 @property (strong, nonatomic) IBOutlet UILabel *departmentLabel;
 
+@property (strong, nonatomic) IBOutlet UITextField *waiterNumLabel;
+
+@property (nonatomic, strong) MTWaiter * waiter;
+
 @end

@@ -14,4 +14,6 @@
 
 @property (strong, nonatomic) IBOutlet UIImageView *headImageView;
 
+@property (nonatomic, strong) MTWaiter * waiter;
+
 @end

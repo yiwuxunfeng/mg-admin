@@ -20,6 +20,12 @@
     
     self.waiterAreaImageView.layer.borderColor = [UIColor lightGrayColor].CGColor;
     self.waiterAreaImageView.layer.borderWidth = 1.0f;
+    [self getDatas];
+}
+
+- (void)getDatas
+{
+    self.waiterAreaLabel.text = self.waiter.currentArea;
 }
 
 - (void)didReceiveMemoryWarning {

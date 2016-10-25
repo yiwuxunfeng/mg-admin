@@ -8,6 +8,8 @@
 
 #import "WaiterDetailController.h"
 #import "CreateWaiterController.h"
+#import "WaiterDetailFirstController.h"
+#import "WaiterDetailLastController.h"
 
 @interface WaiterDetailController ()
 
@@ -29,6 +31,12 @@
     self.editButton.layer.cornerRadius = 5.0f;
     self.pageButton.layer.cornerRadius = 5.0f;
     self.deleteButton.layer.cornerRadius = 5.0f;
+
+#warning waiter不是服务部隐藏下一页按钮 暂定是2
+    if ([self.waiter.dep isEqualToString:@"2"])
+    {
+        self.pageButton.hidden = YES;
+    }
 }
 
 
@@ -54,6 +62,7 @@
 {
     UIStoryboard * storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     CreateWaiterController * createWaiter = [storyBoard instantiateViewControllerWithIdentifier:@"createWaiter"];
+    createWaiter.waiter = self.waiter;
     [self.navigationController pushViewController:createWaiter animated:YES];
 }
 
@@ -67,6 +76,20 @@
     [alert addAction:action1];
     [alert addAction:action2];
     [self presentViewController:alert animated:YES completion:nil];
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([segue.identifier isEqualToString:@"waiterDetailLast"])
+    {
+        WaiterDetailLastController * waiter = [segue destinationViewController];
+        waiter.waiter = self.waiter;
+    }
+    else if ([segue.identifier isEqualToString:@"waiterDetailFirst"])
+    {
+        WaiterDetailFirstController * waiter = [segue destinationViewController];
+        waiter.waiter = self.waiter;
+    }
 }
 
 - (void)didReceiveMemoryWarning {

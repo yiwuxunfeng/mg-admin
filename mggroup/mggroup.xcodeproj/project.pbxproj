@@ -54,6 +54,9 @@
 		FCB5790A1D99217600B3CA47 /* TaskAreaChooseCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FCB579091D99217600B3CA47 /* TaskAreaChooseCell.m */; };
 		FCB5790D1D99219000B3CA47 /* StatisticsDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FCB5790C1D99219000B3CA47 /* StatisticsDetailCell.m */; };
 		FCB78BB11D9A092900B59501 /* DateChooseBaseController.m in Sources */ = {isa = PBXBuildFile; fileRef = FCB78BB01D9A092900B59501 /* DateChooseBaseController.m */; };
+		FCB9A12F1DBDEB1F00417C80 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FCB9A12E1DBDEB1F00417C80 /* UIKit.framework */; };
+		FCB9A1311DBDEB5E00417C80 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FCB9A1301DBDEB5E00417C80 /* QuartzCore.framework */; };
+		FCB9A1341DBDFD8000417C80 /* SaveHeadImage.m in Sources */ = {isa = PBXBuildFile; fileRef = FCB9A1331DBDFD8000417C80 /* SaveHeadImage.m */; };
 		FCC7BCC11D93B3CC00F0B900 /* TaskBaseController.m in Sources */ = {isa = PBXBuildFile; fileRef = FCC7BCC01D93B3CC00F0B900 /* TaskBaseController.m */; };
 		FCC7BCC41D93C13800F0B900 /* TaskNoCompleteController.m in Sources */ = {isa = PBXBuildFile; fileRef = FCC7BCC31D93C13800F0B900 /* TaskNoCompleteController.m */; };
 		FCC7BCC71D93CE1700F0B900 /* TaskCodeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FCC7BCC61D93CE1700F0B900 /* TaskCodeCell.m */; };
@@ -177,6 +180,10 @@
 		FCB5790C1D99219000B3CA47 /* StatisticsDetailCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StatisticsDetailCell.m; sourceTree = "<group>"; };
 		FCB78BAF1D9A092900B59501 /* DateChooseBaseController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DateChooseBaseController.h; sourceTree = "<group>"; };
 		FCB78BB01D9A092900B59501 /* DateChooseBaseController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DateChooseBaseController.m; sourceTree = "<group>"; };
+		FCB9A12E1DBDEB1F00417C80 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		FCB9A1301DBDEB5E00417C80 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		FCB9A1321DBDFD8000417C80 /* SaveHeadImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SaveHeadImage.h; sourceTree = "<group>"; };
+		FCB9A1331DBDFD8000417C80 /* SaveHeadImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SaveHeadImage.m; sourceTree = "<group>"; };
 		FCC7BCBF1D93B3CC00F0B900 /* TaskBaseController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskBaseController.h; sourceTree = "<group>"; };
 		FCC7BCC01D93B3CC00F0B900 /* TaskBaseController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TaskBaseController.m; sourceTree = "<group>"; };
 		FCC7BCC21D93C13800F0B900 /* TaskNoCompleteController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskNoCompleteController.h; sourceTree = "<group>"; };
@@ -240,6 +247,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FCB9A1311DBDEB5E00417C80 /* QuartzCore.framework in Frameworks */,
+				FCB9A12F1DBDEB1F00417C80 /* UIKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -251,6 +260,7 @@
 			children = (
 				FC1C627E1D124B9000BB8445 /* mggroup */,
 				FC1C627D1D124B9000BB8445 /* Products */,
+				FCB9A12D1DBDEB1E00417C80 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -372,6 +382,8 @@
 				FCA338781D8FD73200ED8BFA /* WaiterWorkNoteController.m */,
 				FCA338831D8FEB4C00ED8BFA /* DateChooseController.h */,
 				FCA338841D8FEB4C00ED8BFA /* DateChooseController.m */,
+				FCB9A1321DBDFD8000417C80 /* SaveHeadImage.h */,
+				FCB9A1331DBDFD8000417C80 /* SaveHeadImage.m */,
 			);
 			name = Waiter;
 			sourceTree = "<group>";
@@ -418,6 +430,15 @@
 				FC73F3421DB7651A005953B9 /* UIView+MJExtension.m */,
 			);
 			path = MJRefresh;
+			sourceTree = "<group>";
+		};
+		FCB9A12D1DBDEB1E00417C80 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				FCB9A1301DBDEB5E00417C80 /* QuartzCore.framework */,
+				FCB9A12E1DBDEB1F00417C80 /* UIKit.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		FCC1675D1D1B6D6C004DFBC4 /* Statistics */ = {
@@ -588,6 +609,7 @@
 				FCCECD171DADDC8B009C7DEE /* Parser.m in Sources */,
 				FC73F34A1DB7651A005953B9 /* MJRefreshLegendFooter.m in Sources */,
 				FCB78BB11D9A092900B59501 /* DateChooseBaseController.m in Sources */,
+				FCB9A1341DBDFD8000417C80 /* SaveHeadImage.m in Sources */,
 				FCCECD2A1DADDCED009C7DEE /* AFURLRequestSerialization.m in Sources */,
 				FCC7BCC71D93CE1700F0B900 /* TaskCodeCell.m in Sources */,
 				FCC7BCDF1D93D01000F0B900 /* TaskCancelMenuCell.m in Sources */,

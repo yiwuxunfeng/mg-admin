@@ -32,6 +32,10 @@
     {
         datas = [self parserGetWaiterDetail:dict];
     }
+    else if ([ident isEqualToString:URL_UPDATEWAITER])
+    {
+        datas = [self parserUpdateWaiter:dict];
+    }
     //存储数据
     [[AppDelegate sharedDelegate] saveContext];
     return datas;
@@ -88,12 +92,12 @@
     NSMutableArray *array = [NSMutableArray array];
     NSMutableDictionary * dic = (NSMutableDictionary*)dict;
     
-    MTWaiter * waiter = [[AppDelegate sharedDelegate] findWaiterById:dic[@""]];
+    MTWaiter * waiter = [[AppDelegate sharedDelegate] findWaiterById:dic[@"waiterId"]];
     waiter.attendanceState = dic[@"attendanceState"];
     waiter.birth = dic[@"birth"];
     waiter.currentArea = dic[@"currentArea"];
     waiter.currentLocation = dic[@"currentLocation"];
-    waiter.dep = dic[@"depId"];
+    waiter.dep = dic[@"dep"];
     waiter.deviceId = dic[@"deviceId"];
     waiter.deviceToken = dic[@"deviceToken"];
     waiter.dutyIn = dic[@"dutyIn"];
@@ -105,9 +109,23 @@
     waiter.inCharge = dic[@"incharge"];
     waiter.name = dic[@"name"];
     waiter.nav = dic[@"nav"];
-    waiter.cellPhone = dic[@"phone"];
+    waiter.cellPhone = dic[@"cellPhone"];
     waiter.workNum = dic[@"workNum"];
     waiter.workingState = dic[@"workingState"];
+    
+    [array addObject:waiter];
+    return array;
+}
+
+- (NSMutableArray *)parserUpdateWaiter:(NSData *)dict
+{
+    NSMutableArray *array = [NSMutableArray array];
+    NSMutableDictionary * dic = (NSMutableDictionary*)dict;
+    if ([dic[@"retOk"] isEqualToString:@"0"])
+    {
+        [array addObject:dic];
+    }
+    
     return array;
 }
 

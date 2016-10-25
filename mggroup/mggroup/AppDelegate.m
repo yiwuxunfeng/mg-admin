@@ -175,7 +175,7 @@
 /**
  *  @abstract 从数据库中删除一条数据
  */
-- (void) deleteFromCoreData:(NSManagedObject *) obj
+- (void)deleteFromCoreData:(NSManagedObject *) obj
 {
     [self.managedObjectContext deleteObject:obj];
 }

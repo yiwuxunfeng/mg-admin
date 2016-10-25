@@ -90,6 +90,7 @@
 - (void)refreshData
 {
     self.pageIndex = 1;
+    [self.tableView.legendFooter resetNoMoreData];
     [self NETWORK_getWaiterList];
 }
 
@@ -228,7 +229,7 @@
     if (self.waiterChoose.isChoose == YES)
     {
         if (self.waiterChoose.waiterArea.selectIndex != 0 && self.waiterChoose.waiterArea.selectIndex != NSNotFound)
-            [params setValue:[NSString stringWithFormat:@"%ld",self.waiterChoose.waiterArea.selectIndex] forKey:@"currentArea"];
+            [params setValue:self.waiterChoose.waiterArea.selectIndex == 1 ? @"0" : self.waiterChoose.waiterArea.textField.text forKey:@"currentArea"];
         if (self.waiterChoose.dapartment.selectIndex != 0 && self.waiterChoose.dapartment.selectIndex != NSNotFound)
             [params setValue:[NSString stringWithFormat:@"%ld",self.waiterChoose.dapartment.selectIndex] forKey:@"waiterDep"];
         if (self.waiterChoose.memberStatus.selectIndex != 0 && self.waiterChoose.memberStatus.selectIndex != NSNotFound)
@@ -280,7 +281,9 @@
     if (succeed)
     {
         MTWaiter * waiter = datas[0];
-        NSDate *date = [NSDate dateWithTimeIntervalSince1970:[waiter.dutyIn doubleValue] / 1000];
+        NSDateFormatter * formatter = [[NSDateFormatter alloc]init];
+        formatter.dateFormat = @"yyyy-MM-dd HH:mm:ss";
+        NSDate *date = [formatter dateFromString:waiter.dutyIn];
         if (self.isWaiterManage == NO)
         {
             [self performSegueWithIdentifier:@"pushWaiterDetail" sender:waiter];
@@ -374,20 +377,64 @@
     WaiterListCell * cell = [tableView dequeueReusableCellWithIdentifier:@"waiterList"];
     MTWaiter * waiter = self.waiterArray[indexPath.row];
     cell.waiterName.text = waiter.name;
-    cell.waiterDep.text = waiter.dep;
-    cell.waiterArea.text = waiter.currentArea;
+    if ([waiter.dep isEqualToString:@"1"])
+    {
+        cell.waiterDep.text = @"总机";
+    }
+    else if ([waiter.dep isEqualToString:@"2"])
+    {
+        cell.waiterDep.text = @"送餐部";
+    }
+    else if ([waiter.dep isEqualToString:@"3"])
+    {
+        cell.waiterDep.text = @"前台";
+    }
+    else if ([waiter.dep isEqualToString:@"4"])
+    {
+        cell.waiterDep.text = @"外勤现场";
+    }
+
+    cell.waiterArea.text = [waiter.currentArea isEqualToString:@"0"] ? @"全区域" : waiter.currentArea;
     if (waiter.dutyOut.length <= 0 || [waiter.dutyOut isEqualToString:@""] || waiter.dutyOut == nil)
     {
-        cell.waiterState.text = @"激活中";
-        cell.waiterState.textColor = [UIColor greenColor];
+        if ([waiter.attendanceState isEqualToString:@"1"])
+        {
+            if ([waiter.workingState isEqualToString:@"0"])
+            {
+                cell.waiterState.text = @"空闲中";
+                cell.waiterState.textColor = [UIColor greenColor];
+            }
+            else if ([waiter.workingState isEqualToString:@"1"])
+            {
+                cell.waiterState.text = @"忙碌中";
+                cell.waiterState.textColor = [UIColor redColor];
+            }
+            else
+            {
+                cell.waiterState.text = @"待命中";
+                cell.waiterState.textColor = [UIColor orangeColor];
+            }
+            
+        }
+        else
+        {
+            cell.waiterState.text = @"未上班";
+            cell.waiterState.textColor = [UIColor lightGrayColor];
+        }
     }
     else
     {
         cell.waiterState.text = @"屏蔽中";
-        cell.waiterState.textColor = [UIColor redColor];
+        cell.waiterState.textColor = [UIColor blackColor];
     }
-    if (waiter.facePic)
-        cell.facePicImage.image = [UIImage imageWithContentsOfFile:waiter.facePic];
+    if (waiter.facePic && [waiter.facePic isEqualToString:@"1"])
+    {
+        cell.facePicImage.image = [SaveHeadImage getHeadImageByWaiterId:waiter.waiterId];
+    }
+    else
+    {
+        cell.facePicImage.image = [UIImage imageNamed:@"alan.png"];
+    }
     return cell;
 }
 
@@ -415,7 +462,9 @@
     {
         DetailViewController * detailController = [segue destinationViewController];
         MTWaiter * waiter = sender;
-        detailController.beforeDate = [NSDate dateWithTimeIntervalSince1970:[waiter.dutyIn doubleValue] / 1000];;
+        NSDateFormatter * formatter = [[NSDateFormatter alloc]init];
+        formatter.dateFormat = @"yyyy-MM-dd HH:mm:ss";
+        detailController.beforeDate = [formatter dateFromString:waiter.dutyIn];
         detailController.waiter = waiter;
     }
     else if ([segue.identifier isEqualToString:@"waiterChoose"])
