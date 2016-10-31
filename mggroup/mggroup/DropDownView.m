@@ -155,7 +155,7 @@
     }
     
     cell.textLabel.text = [self.tableArray objectAtIndex:[indexPath row]];
-    cell.textLabel.font = [UIFont systemFontOfSize:16.0f];
+    cell.textLabel.font = [UIFont systemFontOfSize:15.0f];
     cell.accessoryType = UITableViewCellAccessoryNone;
     cell.selectionStyle = UITableViewCellSelectionStyleGray;
     

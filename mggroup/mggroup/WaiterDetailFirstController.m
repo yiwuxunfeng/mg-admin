@@ -30,10 +30,18 @@
     self.tableView.layer.borderColor = [UIColor lightGrayColor].CGColor;
     self.titleArray = [NSMutableArray arrayWithArray:@[@"姓名",@"性别",@"电话",@"所属部门",@"员工编号"]];
     
+    self.navigationItem.title = self.waiter.name;
     if (self.waiter.facePic)
     {
         self.headImageView.image = [SaveHeadImage getHeadImageByWaiterId:self.waiter.waiterId];
     }
+}
+
+- (void)viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
+    self.headImageView.layer.cornerRadius = self.headImageView.bounds.size.width / 2;
+    self.headImageView.layer.masksToBounds = YES;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView

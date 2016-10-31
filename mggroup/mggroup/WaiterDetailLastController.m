@@ -20,6 +20,10 @@
     
     self.waiterAreaImageView.layer.borderColor = [UIColor lightGrayColor].CGColor;
     self.waiterAreaImageView.layer.borderWidth = 1.0f;
+    self.areaTitleLabel.layer.cornerRadius = 5.0f;
+    self.areaTitleLabel.clipsToBounds = YES;
+    self.waiterAreaLabel.layer.cornerRadius = 5.0f;
+    self.waiterAreaLabel.clipsToBounds = YES;
     [self getDatas];
 }
 

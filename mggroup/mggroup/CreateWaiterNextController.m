@@ -12,6 +12,8 @@
 
 @interface CreateWaiterNextController () <MTRequestNetWorkDelegate>
 
+@property (strong, nonatomic) IBOutlet UIView *bgView;
+
 @property (nonatomic, strong) DropDownView * department;
 @property (nonatomic, strong) MBProgressHUD * hud;
 
@@ -27,6 +29,10 @@
     
     self.commitButton.layer.cornerRadius = 5.0f;
     self.navigationItem.title = @"创建服务员";
+    self.departmentLabel.layer.cornerRadius = 5.0f;
+    self.departmentLabel.clipsToBounds = YES;
+    
+    self.bgView.layer.cornerRadius = 20.0f;
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -44,7 +50,9 @@
         self.department.textField.placeholder = @"请选负责区域";
         [self.view addSubview:self.department];
     }
-    self.departmentLabel.text = [self.waiter.currentArea isEqualToString:@"0"] ? @"全区域" :self.waiter.currentArea;
+    self.department.textField.text = [self.waiter.currentArea isEqualToString:@"0"] ? @"全区域" :self.waiter.currentArea;
+    if ([self.waiter.currentArea isEqualToString:@"0"])
+        self.department.selectIndex = 0;
 }
 
 // 注册网络请求代理
@@ -233,7 +241,7 @@
         [self presentViewController:alert animated:YES completion:nil];
         return;
     }
-    self.waiter.currentArea = self.department.selectIndex == 1 ? @"0" : self.department.textField.text ;
+    self.waiter.currentArea = self.department.selectIndex == 0 ? @"0" : self.department.textField.text ;
     
     UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"提示信息" message:@"确定要提交改服务员信息吗" preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction * action1 = [UIAlertAction actionWithTitle:@"确认" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {

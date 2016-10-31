@@ -70,6 +70,7 @@
     self.hasNextPage = YES;
     if (self.waiter)
     {
+        self.navigationItem.title = @"编辑服务员";
         if (![self.waiter.dep isEqualToString:@"4"])
         {
             self.hasNextPage = NO;
@@ -95,7 +96,10 @@
         self.waiterNumLabel.userInteractionEnabled = NO;
         
         if ([self.waiter.facePic isEqualToString:@"1"])
+        {
             self.headImageView.image = [SaveHeadImage getHeadImageByWaiterId:self.waiter.waiterId];
+            self.tapChooseLabel.hidden = YES;
+        }
     }
 }
 
@@ -225,7 +229,7 @@
             }
             nextController.waiter.name = self.nameText.text;
             nextController.waiter.cellPhone = self.phoneText.text;
-            nextController.waiter.dep = [NSString stringWithFormat:@"%ld",self.department.selectIndex];
+            nextController.waiter.dep = [NSString stringWithFormat:@"%ld",self.department.selectIndex + 1];
             nextController.waiter.gender = [NSString stringWithFormat:@"%ld",self.selectSex];
             nextController.waiter.workNum = self.waiterNumLabel.text;
             nextController.faceImage = self.faceImage == nil ? nil : self.faceImage;
@@ -238,7 +242,7 @@
         {
             self.waiter.name = self.nameText.text;
             self.waiter.cellPhone = self.phoneText.text;
-            self.waiter.dep = [NSString stringWithFormat:@"%ld",self.department.selectIndex];
+            self.waiter.dep = [NSString stringWithFormat:@"%ld",self.department.selectIndex + 1];
             self.waiter.gender = [NSString stringWithFormat:@"%ld",self.selectSex];
             self.waiter.workNum = self.waiterNumLabel.text;
             UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"提示信息" message:@"确认修改服务员信息吗？" preferredStyle:UIAlertControllerStyleAlert];

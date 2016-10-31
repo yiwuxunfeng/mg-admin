@@ -10,4 +10,16 @@
 
 @interface TaskCancelCallCell : UITableViewCell
 
+@property (strong, nonatomic) IBOutlet UILabel *nameLabel;
+@property (strong, nonatomic) IBOutlet UILabel *roomCodeLabel;
+@property (strong, nonatomic) IBOutlet UILabel *phoneLabel;
+@property (strong, nonatomic) IBOutlet UILabel *currentAreaLabel;
+@property (strong, nonatomic) IBOutlet UILabel *createTimelabel;
+@property (strong, nonatomic) IBOutlet UILabel *acceptTimeLabel;
+@property (strong, nonatomic) IBOutlet UILabel *acceptTimeOutLabel;
+@property (strong, nonatomic) IBOutlet UILabel *serviceTimeOutLabel;
+@property (strong, nonatomic) IBOutlet UILabel *acceptStatusLabel;
+@property (strong, nonatomic) IBOutlet UILabel *messageLabel;
+@property (strong, nonatomic) IBOutlet UILabel *resionLabel;
+
 @end

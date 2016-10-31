@@ -36,19 +36,21 @@
 - (IBAction)tapTimeArea:(id)sender
 {
     UIStoryboard * storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-    WaiterController * waiter = [storyboard instantiateViewControllerWithIdentifier:@"Waiter"];
-    waiter.isWaiterManage = YES;
-    [waiter changeLeftButton];
-    [self.navigationController pushViewController:waiter animated:YES];
+    StatisticsDetailController * detail = [storyboard instantiateViewControllerWithIdentifier:@"StatisticsDetailController"];
+    detail.isWaiterStatistics = YES;
+    detail.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:detail animated:YES];
 }
 
 // 点击服务人员统计按钮
 - (IBAction)tapwaiterButton:(id)sender
 {
     UIStoryboard * storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-    StatisticsDetailController * detail = [storyboard instantiateViewControllerWithIdentifier:@"StatisticsDetailController"];
-    detail.isWaiterStatistics = YES;
-    [self.navigationController pushViewController:detail animated:YES];
+    WaiterController * waiter = [storyboard instantiateViewControllerWithIdentifier:@"Waiter"];
+    waiter.isWaiterManage = YES;
+    waiter.hidesBottomBarWhenPushed = YES;
+    [waiter changeLeftButton];
+    [self.navigationController pushViewController:waiter animated:YES];
 }
 
 

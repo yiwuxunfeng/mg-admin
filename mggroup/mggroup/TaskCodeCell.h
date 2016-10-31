@@ -10,4 +10,8 @@
 
 @interface TaskCodeCell : UITableViewCell
 
+@property (strong, nonatomic) IBOutlet UILabel *taskCodeLabel;
+
+@property (strong, nonatomic) IBOutlet UILabel *showLabel;
+
 @end

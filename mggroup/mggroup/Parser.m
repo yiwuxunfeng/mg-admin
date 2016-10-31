@@ -6,6 +6,7 @@
  */
 
 #import "Parser.h"
+#import "TaskModel.h"
 
 @implementation Parser
 
@@ -35,6 +36,18 @@
     else if ([ident isEqualToString:URL_UPDATEWAITER])
     {
         datas = [self parserUpdateWaiter:dict];
+    }
+    else if ([ident isEqualToString:URL_WAITER_TASKSTATIC])
+    {
+        datas = [self parserGetWaiterTaskStatistics:dict];
+    }
+    else if ([ident isEqualToString:URL_TASK_DETAIL])
+    {
+        datas = [self parserGetTaskDetail:dict];
+    }
+    else if ([ident isEqualToString:URL_TASK_LIST])
+    {
+        datas = [self parserGetTaskList:dict];
     }
     //存储数据
     [[AppDelegate sharedDelegate] saveContext];
@@ -128,5 +141,106 @@
     
     return array;
 }
+
+- (NSMutableArray *)parserGetWaiterTaskStatistics:(NSData *)dict
+{
+    NSMutableArray *array = [NSMutableArray array];
+    NSMutableArray *array1 = [NSMutableArray array];
+    NSMutableDictionary * dic = (NSMutableDictionary*)dict;
+    
+    for (NSDictionary * taskDic in dic[@"list"])
+    {
+        TaskModel * task = [[TaskModel alloc]init];
+        task.category = taskDic[@"category"];
+        task.confirmState = taskDic[@"confirmState"];
+        task.createTime = taskDic[@"createTime"];
+        task.deviceId = taskDic[@"deviceId"];
+        task.deviceToken = taskDic[@"deviceToken"];
+        task.drorderNo = taskDic[@"drorderNo"];
+        task.location = taskDic[@"location"];
+        task.locationArea = taskDic[@"locationArea"];
+        task.locationDesc = taskDic[@"locationDesc"];
+        task.messageInfo = taskDic[@"messageInfo"];
+        task.patternInfo = taskDic[@"patternInfo"];
+        task.phone = taskDic[@"phone"];
+        task.priority = taskDic[@"priority"];
+        task.score = taskDic[@"score"];
+        task.taskCode = taskDic[@"taskCode"];
+        task.timeLimit = taskDic[@"timeLimit"];
+        [array addObject:task];
+    }
+    NSMutableDictionary * dictionary = [NSMutableDictionary dictionary];
+    [dictionary setObject:array forKey:@"data"];
+    [dictionary setObject:dic[@"count"] forKey:@"count"];
+    [array1 addObject:dictionary];
+    return array1;
+}
+
+- (NSMutableArray *)parserGetTaskDetail:(NSData *)dict
+{
+    NSMutableArray *array = [NSMutableArray array];
+    NSMutableDictionary * dic = (NSMutableDictionary*)dict;
+    TaskModel * task = [[TaskModel alloc]init];
+    
+    task.cancelTime = dic[@"cancelTime"];
+    task.confirmState = dic[@"confirmState"];
+    task.acceptTime = dic[@"progressInfo"][@"acceptTime"];
+    task.createTime = dic[@"progressInfo"][@"createTime"];
+    task.waiterDeviceId = dic[@"progressInfo"][@"deviceId"];
+    task.finishTime = dic[@"progressInfo"][@"finishTime"];
+    task.waiterLocation = dic[@"progressInfo"][@"location"];
+    task.workNum = dic[@"progressInfo"][@"workNum"];
+    task.status = dic[@"status"];
+    task.category = dic[@"taskInfo"][@"category"];
+    task.deviceId = dic[@"taskInfo"][@"diviceId"];
+    task.drorderNo = dic[@"taskInfo"][@"drOrderNo"];
+    task.location = dic[@"taskInfo"][@"location"];
+    task.locationArea = dic[@"taskInfo"][@"locationArea"];
+    task.locationDesc = dic[@"taskInfo"][@"locationDesc"];
+    task.messageInfo = dic[@"taskInfo"][@"messageInfo"];
+    task.patternInfo = dic[@"taskInfo"][@"patternInfo"];
+    task.priority = dic[@"taskInfo"][@"priority"];
+    task.taskCode = dic[@"taskInfo"][@"taskCode"];
+    task.timeLimit = dic[@"taskInfo"][@"timeLimit"];
+    
+    [array addObject:task];
+    return array;
+}
+
+- (NSMutableArray *)parserGetTaskList:(NSData *)dict
+{
+    NSMutableArray *array = [NSMutableArray array];
+    NSMutableArray *array1 = [NSMutableArray array];
+    NSMutableDictionary * dic = (NSMutableDictionary*)dict;
+    
+    for (NSDictionary * taskDic in dic[@"list"])
+    {
+        TaskModel * task = [[TaskModel alloc]init];
+        task.category = taskDic[@"category"];
+        task.confirmState = taskDic[@"confirmState"];
+        task.createTime = taskDic[@"createTime"];
+        task.deviceId = taskDic[@"deviceId"];
+        task.deviceToken = taskDic[@"deviceToken"];
+        task.drorderNo = taskDic[@"drorderNo"];
+        task.location = taskDic[@"location"];
+        task.locationArea = taskDic[@"locationArea"];
+        task.locationDesc = taskDic[@"locationDesc"];
+        task.messageInfo = taskDic[@"messageInfo"];
+        task.patternInfo = taskDic[@"patternInfo"];
+        task.phone = taskDic[@"phone"];
+        task.priority = taskDic[@"priority"];
+        task.score = taskDic[@"score"];
+        task.taskCode = taskDic[@"taskCode"];
+        task.timeLimit = taskDic[@"timeLimit"];
+        [array addObject:task];
+    }
+    NSMutableDictionary * dictionary = [NSMutableDictionary dictionary];
+    [dictionary setObject:array forKey:@"data"];
+    [dictionary setObject:dic[@"count"] forKey:@"count"];
+    [array1 addObject:dictionary];
+    return array1;
+    return array;
+}
+
 
 @end

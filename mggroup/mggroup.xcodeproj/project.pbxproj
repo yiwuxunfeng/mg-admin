@@ -48,6 +48,9 @@
 		FCA6F6171D94C5520052F212 /* AssignOrderController.m in Sources */ = {isa = PBXBuildFile; fileRef = FCA6F6161D94C5520052F212 /* AssignOrderController.m */; };
 		FCA6F61A1D94D0FF0052F212 /* TaskCompleteController.m in Sources */ = {isa = PBXBuildFile; fileRef = FCA6F6191D94D0FF0052F212 /* TaskCompleteController.m */; };
 		FCA6F61D1D94D10C0052F212 /* TaskCancelController.m in Sources */ = {isa = PBXBuildFile; fileRef = FCA6F61C1D94D10C0052F212 /* TaskCancelController.m */; };
+		FCA90B3F1DC082EC00455AF9 /* StarView.m in Sources */ = {isa = PBXBuildFile; fileRef = FCA90B3E1DC082EC00455AF9 /* StarView.m */; };
+		FCA90B421DC083D300455AF9 /* UIViewExt.m in Sources */ = {isa = PBXBuildFile; fileRef = FCA90B411DC083D300455AF9 /* UIViewExt.m */; };
+		FCA90B451DC0882000455AF9 /* TaskModel.m in Sources */ = {isa = PBXBuildFile; fileRef = FCA90B441DC0882000455AF9 /* TaskModel.m */; };
 		FCB578FE1D990CBF00B3CA47 /* StatisticsController.m in Sources */ = {isa = PBXBuildFile; fileRef = FCB578FD1D990CBF00B3CA47 /* StatisticsController.m */; };
 		FCB579011D99158600B3CA47 /* StatisticsDetailController.m in Sources */ = {isa = PBXBuildFile; fileRef = FCB579001D99158600B3CA47 /* StatisticsDetailController.m */; };
 		FCB579041D99213F00B3CA47 /* AllTaskNumberCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FCB579031D99213F00B3CA47 /* AllTaskNumberCell.m */; };
@@ -168,6 +171,12 @@
 		FCA6F6191D94D0FF0052F212 /* TaskCompleteController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TaskCompleteController.m; sourceTree = "<group>"; };
 		FCA6F61B1D94D10C0052F212 /* TaskCancelController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskCancelController.h; sourceTree = "<group>"; };
 		FCA6F61C1D94D10C0052F212 /* TaskCancelController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TaskCancelController.m; sourceTree = "<group>"; };
+		FCA90B3D1DC082EC00455AF9 /* StarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StarView.h; sourceTree = "<group>"; };
+		FCA90B3E1DC082EC00455AF9 /* StarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StarView.m; sourceTree = "<group>"; };
+		FCA90B401DC083D300455AF9 /* UIViewExt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewExt.h; sourceTree = "<group>"; };
+		FCA90B411DC083D300455AF9 /* UIViewExt.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewExt.m; sourceTree = "<group>"; };
+		FCA90B431DC0882000455AF9 /* TaskModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskModel.h; sourceTree = "<group>"; };
+		FCA90B441DC0882000455AF9 /* TaskModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TaskModel.m; sourceTree = "<group>"; };
 		FCB578FC1D990CBF00B3CA47 /* StatisticsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StatisticsController.h; sourceTree = "<group>"; };
 		FCB578FD1D990CBF00B3CA47 /* StatisticsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StatisticsController.m; sourceTree = "<group>"; };
 		FCB578FF1D99158600B3CA47 /* StatisticsDetailController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StatisticsDetailController.h; sourceTree = "<group>"; };
@@ -343,6 +352,10 @@
 				FCA6F61C1D94D10C0052F212 /* TaskCancelController.m */,
 				FC8C4CB41D9505A5004C31F7 /* AssignTaskWaiterCell.h */,
 				FC8C4CB51D9505A5004C31F7 /* AssignTaskWaiterCell.m */,
+				FCA90B3D1DC082EC00455AF9 /* StarView.h */,
+				FCA90B3E1DC082EC00455AF9 /* StarView.m */,
+				FCA90B401DC083D300455AF9 /* UIViewExt.h */,
+				FCA90B411DC083D300455AF9 /* UIViewExt.m */,
 			);
 			name = Task;
 			sourceTree = "<group>";
@@ -473,6 +486,8 @@
 				FCCECD101DADDC8B009C7DEE /* MTPagerUnit.m */,
 				FCCECD111DADDC8B009C7DEE /* Parser.h */,
 				FCCECD121DADDC8B009C7DEE /* Parser.m */,
+				FCA90B431DC0882000455AF9 /* TaskModel.h */,
+				FCA90B441DC0882000455AF9 /* TaskModel.m */,
 			);
 			name = Network;
 			sourceTree = "<group>";
@@ -590,6 +605,7 @@
 				FC73F3461DB7651A005953B9 /* MJRefreshFooter.m in Sources */,
 				FCA6F6171D94C5520052F212 /* AssignOrderController.m in Sources */,
 				FCC7BCDC1D93CFFC00F0B900 /* TaskCancelCallCell.m in Sources */,
+				FCA90B451DC0882000455AF9 /* TaskModel.m in Sources */,
 				FCC7BCD31D93CFBD00F0B900 /* TaskNoCompleteMenuCell.m in Sources */,
 				FC1C629B1D12709D00BB8445 /* TaskController.m in Sources */,
 				FCC7BCD61D93CFD600F0B900 /* TaskCompleteCallCell.m in Sources */,
@@ -634,6 +650,7 @@
 				FC73F34B1DB7651A005953B9 /* MJRefreshLegendHeader.m in Sources */,
 				FCCECD151DADDC8B009C7DEE /* MTBaseNetworkController.m in Sources */,
 				FCB579041D99213F00B3CA47 /* AllTaskNumberCell.m in Sources */,
+				FCA90B3F1DC082EC00455AF9 /* StarView.m in Sources */,
 				FCCECD2F1DADDD83009C7DEE /* MBProgressHUD.m in Sources */,
 				FCB579011D99158600B3CA47 /* StatisticsDetailController.m in Sources */,
 				FCDE87A61D8E62C8003ECBDB /* WaiterChooseController.m in Sources */,
@@ -653,6 +670,7 @@
 				FC73F3491DB7651A005953B9 /* MJRefreshHeader.m in Sources */,
 				FC1C62811D124B9000BB8445 /* main.m in Sources */,
 				FCCECD131DADDC8B009C7DEE /* MTNetwork.m in Sources */,
+				FCA90B421DC083D300455AF9 /* UIViewExt.m in Sources */,
 				FCA338761D8FC7C800ED8BFA /* WaiterDetailLastController.m in Sources */,
 				FC1C62B21D12870D00BB8445 /* DetailViewController.m in Sources */,
 			);

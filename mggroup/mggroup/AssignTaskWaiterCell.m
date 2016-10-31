@@ -15,6 +15,9 @@
     
     self.contentView.layer.borderWidth = 0.5f;
     self.contentView.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    
+    self.callButton.layer.cornerRadius = 5.0f;
+    self.assignButton.layer.cornerRadius = 5.0f;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

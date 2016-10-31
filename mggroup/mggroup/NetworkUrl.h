@@ -17,4 +17,10 @@
 
 #define URL_UPDATEWAITER @"/hotelservice/manage/manager/updateWaiter.json"
 
+#define URL_WAITER_TASKSTATIC @"/hotelservice/checkin/service/waiter_task_static.json"
+
+#define URL_TASK_DETAIL @"/hotelservice/checkin/service/get_task.json"
+
+#define URL_TASK_LIST @"/hotelservice/checkin/service/task_array.json"
+
 #endif /* NetworkUrl_h */

@@ -61,8 +61,8 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hiddenChoose:) name:@"hiddenChoose" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showChoose:) name:@"showChoose" object:nil];
-    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshData) name:@"refreshData" object:nil];
+    
     [self refreshDatas];
     [self loadMoreDatas];
 }
@@ -295,6 +295,7 @@
             detail.beforeDate = date;
             detail.isWaiterStatistics = NO;
             detail.waiter = waiter;
+            detail.hidesBottomBarWhenPushed = YES;
             [self.navigationController pushViewController:detail animated:YES];
         }
     }

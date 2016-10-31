@@ -31,25 +31,28 @@
     UITapGestureRecognizer * detailTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(changeSelect:)];
     [self.calendarLabel addGestureRecognizer:calendarTap];
     [self.detailLabel addGestureRecognizer:detailTap];
+    
+    self.calendarLabel.layer.borderWidth = 0.5f;
+    self.calendarLabel.layer.borderColor = [UIColor colorWithRed:40 / 255.0f green:145 / 255.0f blue:109 / 255.0f alpha:1].CGColor;
+    self.detailLabel.layer.borderWidth = 0.5f;
+    self.detailLabel.layer.borderColor = [UIColor colorWithRed:40 / 255.0f green:145 / 255.0f blue:109 / 255.0f alpha:1].CGColor;
+    
+    self.navigationItem.title = @"服务员信息";
 }
 
 - (void)changeSelect:(UITapGestureRecognizer *)tap
 {
     if (tap.view == self.detailLabel)
     {
-        self.detailLabel.backgroundColor = [UIColor colorWithRed:41 / 255.0f green:139 / 255.0f blue:255 / 255.0f alpha:1];
+        self.detailLabel.backgroundColor = [UIColor colorWithRed:40 / 255.0f green:145 / 255.0f blue:109 / 255.0f alpha:1];
         self.calendarLabel.backgroundColor = [UIColor whiteColor];
-        self.detailLabel.textColor = [UIColor whiteColor];
-        self.calendarLabel.textColor = [UIColor colorWithRed:41 / 255.0f green:139 / 255.0f blue:255 / 255.0f alpha:1];
         self.detailView.hidden = NO;
         self.calendarView.hidden = YES;
     }
     else
     {
         self.detailLabel.backgroundColor = [UIColor whiteColor];
-        self.calendarLabel.backgroundColor = [UIColor colorWithRed:41 / 255.0f green:139 / 255.0f blue:255 / 255.0f alpha:1];
-        self.detailLabel.textColor = [UIColor colorWithRed:41 / 255.0f green:139 / 255.0f blue:255 / 255.0f alpha:1];
-        self.calendarLabel.textColor = [UIColor whiteColor];
+        self.calendarLabel.backgroundColor = [UIColor colorWithRed:40 / 255.0f green:145 / 255.0f blue:109 / 255.0f alpha:1];
         self.detailView.hidden = YES;
         self.calendarView.hidden = NO;
         
@@ -71,6 +74,7 @@
     {
         CalendarController * calendarController = [segue destinationViewController];
         calendarController.beforeDate = self.beforeDate;
+        calendarController.waiter = self.waiter;
         calendarController.controllerType = @"WaiterDetail";
     }
     else if([segue.identifier isEqualToString:@"waiterData"])

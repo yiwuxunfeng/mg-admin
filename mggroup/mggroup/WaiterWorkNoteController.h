@@ -25,5 +25,7 @@
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 
 @property (nonatomic, copy) NSString * titleDate;
+@property (nonatomic, strong) NSDate * selectDate;
+@property (nonatomic, strong) MTWaiter * waiter;
 
 @end

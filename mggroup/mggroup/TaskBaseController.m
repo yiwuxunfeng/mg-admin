@@ -45,36 +45,53 @@
     UIStoryboard * storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     TaskNoCompleteController * taskNO = [storyBoard instantiateViewControllerWithIdentifier:@"taskNo"];
     taskNO.isNoAccept = YES;
+    taskNO.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:taskNO animated:YES];
 }
 
 - (IBAction)noCompleteTask:(id)sender
 {
+    UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"提示信息" message:@"暂不支持查看未完成任务" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction * action = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:nil];
+    [alert addAction:action];
+    [self presentViewController:alert animated:YES completion:nil];
+    return;
     UIStoryboard * storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     TaskNoCompleteController * taskNO = [storyBoard instantiateViewControllerWithIdentifier:@"taskNo"];
     taskNO.isNoAccept = NO;
+    taskNO.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:taskNO animated:YES];
 }
 
 - (IBAction)completeTask:(id)sender
 {
+    UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"提示信息" message:@"暂不支持查看已完成任务" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction * action = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:nil];
+    [alert addAction:action];
+    [self presentViewController:alert animated:YES completion:nil];
+    return;
     UIStoryboard * storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     CalendarController * calendar = [storyBoard instantiateViewControllerWithIdentifier:@"calendar"];
     calendar.beforeDate = self.beforeDate;
     calendar.controllerType = @"TaskComplete";
+    calendar.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:calendar animated:YES];
 }
 
 - (IBAction)cancelTask:(id)sender
 {
+    UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"提示信息" message:@"暂不支持查看被取消任务" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction * action = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:nil];
+    [alert addAction:action];
+    [self presentViewController:alert animated:YES completion:nil];
+    return;
     UIStoryboard * storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     CalendarController * calendar = [storyBoard instantiateViewControllerWithIdentifier:@"calendar"];
     calendar.beforeDate = self.beforeDate;
     calendar.controllerType = @"TaskCancel";
+    calendar.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:calendar animated:YES];
 }
-
-
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

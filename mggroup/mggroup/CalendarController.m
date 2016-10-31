@@ -47,6 +47,12 @@
         {
             WaiterWorkNoteController * workController = [storyboard instantiateViewControllerWithIdentifier:@"waiterWorkNote"];
             workController.titleDate = [NSString stringWithFormat:@"%ld年%ld月%ld日",year,month,day];
+            NSString* string = [NSString stringWithFormat:@"%ld-%ld-%ld",year,month,day];
+            NSDateFormatter *inputFormatter = [[NSDateFormatter alloc] init];
+            [inputFormatter setDateFormat:@"yyyy-MM-dd"];
+            NSDate* inputDate = [inputFormatter dateFromString:string];
+            workController.selectDate = inputDate;
+            workController.waiter = weakSelf.waiter;
             [weakSelf.navigationController pushViewController:workController animated:YES];
         }
         else if ([weakSelf.controllerType isEqualToString:@"TaskCancel"])
@@ -79,6 +85,8 @@
 {
     self.chooseDateShadowView.hidden = YES;
     NSInteger change = [noti.object integerValue];
+    if (change == 0)
+        return;
     self.date = [self allMonth:[NSDate date] withMonths:change];
 }
 
@@ -194,6 +202,8 @@
     
     NSInteger daysInThisMonth = [self totaldaysInMonth:_date];
     NSInteger firstWeekday = [self firstWeekdayInThisMonth:_date];
+    NSDateComponents *comp = [[NSCalendar currentCalendar] components:(NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay) fromDate:self.date];
+    NSDateComponents *beforeComp = [[NSCalendar currentCalendar] components:(NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay) fromDate:self.beforeDate];
     
     NSInteger day = 0;
     NSInteger i = indexPath.row;
@@ -209,13 +219,23 @@
         [cell.dateLabel setTextColor:[UIColor colorWithRed:111 / 255.0 green:111 / 255.0 blue:111 / 255.0 alpha:1]];
         
         //this month
-        if ([_today isEqualToDate:_date]) {
-            if (day == [self day:_date]) {
+        if ([_today isEqualToDate:_date])
+        {
+            if (day == [self day:_date])
+            {
                 [cell.dateLabel setTextColor:[UIColor colorWithRed:72 / 255.0 green:152 / 255.0 blue:235 / 255.0 alpha:1]];
-            } else if (day > [self day:_date]) {
+            }
+            else if (day > [self day:_date])
+            {
                 [cell.dateLabel setTextColor:[UIColor colorWithRed:203 / 255.0 green:203 / 255.0 blue:203 / 255.0 alpha:1]];
             }
-        } else if ([_today compare:_date] == NSOrderedAscending) {
+            else if (day < beforeComp.day && (beforeComp.year == comp.year && beforeComp.month == comp.month))
+            {
+                [cell.dateLabel setTextColor:[UIColor colorWithRed:203 / 255.0 green:203 / 255.0 blue:203 / 255.0 alpha:1]];
+            }
+        }
+        else if ([_today compare:_date] == NSOrderedAscending)
+        {
             [cell.dateLabel setTextColor:[UIColor colorWithRed:203 / 255.0 green:203 / 255.0 blue:203 / 255.0 alpha:1]];
         }
     }
@@ -231,15 +251,30 @@
     NSInteger day = 0;
     NSInteger i = indexPath.row;
     
-    if (i >= firstWeekday && i <= firstWeekday + daysInThisMonth - 1) {
+    NSDateComponents *comp = [[NSCalendar currentCalendar] components:(NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay) fromDate:self.date];
+    NSDateComponents *beforeComp = [[NSCalendar currentCalendar] components:(NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay) fromDate:self.beforeDate];
+    BOOL isSameMonth = NO;
+    if (comp.year == beforeComp.year && comp.month == beforeComp.month)
+        isSameMonth = YES;
+    
+    if (i >= firstWeekday && i <= firstWeekday + daysInThisMonth - 1)
+    {
         day = i - firstWeekday + 1;
         
         //this month
-        if ([_today isEqualToDate:_date]) {
-            if (day <= [self day:_date]) {
+        if ([_today isEqualToDate:_date])
+        {
+            if (day <= [self day:_date] && day >= (isSameMonth ? beforeComp.day : 1))
+            {
                 return YES;
             }
-        } else if ([_today compare:_date] == NSOrderedDescending) {
+            else
+            {
+                return NO;
+            }
+        }
+        else if ([_today compare:_date] == NSOrderedDescending)
+        {
             return YES;
         }
     }

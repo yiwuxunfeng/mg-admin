@@ -32,13 +32,11 @@
     self.pageButton.layer.cornerRadius = 5.0f;
     self.deleteButton.layer.cornerRadius = 5.0f;
 
-#warning waiter不是服务部隐藏下一页按钮 暂定是2
-    if ([self.waiter.dep isEqualToString:@"2"])
+    if (![self.waiter.dep isEqualToString:@"4"])
     {
         self.pageButton.hidden = YES;
     }
 }
-
 
 #pragma mark - 底部栏按钮触发
 

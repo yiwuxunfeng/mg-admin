@@ -10,4 +10,11 @@
 
 @interface AssignTaskWaiterCell : UITableViewCell
 
+@property (strong, nonatomic) IBOutlet UIImageView *headImageView;
+@property (strong, nonatomic) IBOutlet UILabel *waiterNameLabel;
+@property (strong, nonatomic) IBOutlet UILabel *waiterDepLabel;
+@property (strong, nonatomic) IBOutlet UILabel *currentAreaLabel;
+@property (strong, nonatomic) IBOutlet UIButton *callButton;
+@property (strong, nonatomic) IBOutlet UIButton *assignButton;
+
 @end

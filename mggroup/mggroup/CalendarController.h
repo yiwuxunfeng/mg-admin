@@ -13,5 +13,6 @@
 @property (nonatomic, strong) NSDate * beforeDate;
 
 @property (nonatomic, copy) NSString * controllerType;
+@property (nonatomic, strong) MTWaiter * waiter;
 
 @end

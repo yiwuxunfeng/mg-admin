@@ -10,6 +10,15 @@
 
 @interface AssignOrderController : UIViewController
 
+@property (strong, nonatomic) IBOutlet UILabel *nameLabel;
+@property (strong, nonatomic) IBOutlet UILabel *roomCodeLabel;
+@property (strong, nonatomic) IBOutlet UILabel *phoneLabel;
+@property (strong, nonatomic) IBOutlet UILabel *currentAreaLabel;
+@property (strong, nonatomic) IBOutlet UILabel *createTimeLabel;
+@property (strong, nonatomic) IBOutlet UILabel *waitTimeOutLabel;
+@property (strong, nonatomic) IBOutlet UILabel *messageLabel;
+
 @property (nonatomic, assign) BOOL isCallTask;
+@property (nonatomic, strong) TaskModel * task;
 
 @end
