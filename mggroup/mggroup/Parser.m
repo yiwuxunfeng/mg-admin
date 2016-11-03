@@ -49,6 +49,10 @@
     {
         datas = [self parserGetTaskList:dict];
     }
+    else if ([ident isEqualToString:URL_GET_TASK_LIST])
+    {
+        datas = [self parserGetTaskStatistics:dict];
+    }
     //存储数据
     [[AppDelegate sharedDelegate] saveContext];
     return datas;
@@ -242,5 +246,38 @@
     return array;
 }
 
+- (NSMutableArray *)parserGetTaskStatistics:(NSData *)dict
+{
+    NSMutableArray *array = [NSMutableArray array];
+    NSMutableArray *array1 = [NSMutableArray array];
+    NSMutableDictionary * dic = (NSMutableDictionary*)dict;
+    
+    for (NSDictionary * taskDic in dic[@"list"])
+    {
+        TaskModel * task = [[TaskModel alloc]init];
+        task.category = taskDic[@"category"];
+        task.confirmState = taskDic[@"confirmState"];
+        task.createTime = taskDic[@"createTime"];
+        task.deviceId = taskDic[@"deviceId"];
+        task.deviceToken = taskDic[@"deviceToken"];
+        task.drorderNo = taskDic[@"drorderNo"];
+        task.location = taskDic[@"location"];
+        task.locationArea = taskDic[@"locationArea"];
+        task.locationDesc = taskDic[@"locationDesc"];
+        task.messageInfo = taskDic[@"messageInfo"];
+        task.patternInfo = taskDic[@"patternInfo"];
+        task.phone = taskDic[@"phone"];
+        task.priority = taskDic[@"priority"];
+        task.score = taskDic[@"score"];
+        task.taskCode = taskDic[@"taskCode"];
+        task.timeLimit = taskDic[@"timeLimit"];
+        [array addObject:task];
+    }
+    NSMutableDictionary * dictionary = [NSMutableDictionary dictionary];
+    [dictionary setObject:array forKey:@"data"];
+    [dictionary setObject:dic[@"count"] forKey:@"count"];
+    [array1 addObject:dictionary];
+    return array1;
+}
 
 @end

@@ -100,4 +100,6 @@
 
 + (NSString *)md5:(NSString *)str;
 
++ (NSString *)dateTimeOutFromStartTime:(NSString *)startTime endTime:(NSString *)endTime;
+
 @end

@@ -656,4 +656,32 @@ void ProviderReleaseData (void *info, const void *data, size_t size){
             result[12], result[13], result[14], result[15]
             ]; 
 }
+
++ (NSString *)dateTimeOutFromStartTime:(NSString *)startTime endTime:(NSString *)endTime
+{
+    NSDateFormatter * date = [[NSDateFormatter alloc] init];
+    [date setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    NSDate * startD = [date dateFromString:startTime];
+    NSDate * endD = [date dateFromString:endTime];
+    NSTimeInterval start = [startD timeIntervalSince1970] * 1;
+    NSTimeInterval end = [endD timeIntervalSince1970] * 1;
+    NSTimeInterval value = end - start;
+    int second = (int)value % 60;
+    int minute = (int)value /60 % 60;
+    int house = (int)value / (24 * 3600) % 3600;
+    NSString * str;
+    if (house != 0)
+    {
+        str = [NSString stringWithFormat:@"%d小时%d分%d秒",house,minute,second];
+    }
+    else if (house== 0 && minute!=0)
+    {
+        str = [NSString stringWithFormat:@"%d分%d秒",minute,second];
+    }
+    else
+    {
+        str = [NSString stringWithFormat:@"%d秒",second];
+    }
+    return str;
+}
 @end

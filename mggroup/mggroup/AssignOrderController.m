@@ -46,7 +46,7 @@
     self.phoneLabel.text = self.task.phone;
     self.currentAreaLabel.text = self.task.locationArea;
     self.createTimeLabel.text = self.task.createTime;
-    self.waitTimeOutLabel.text = [self dateTimeOutFromStartTime:self.task.createTime endTime:[Util getTimeNow]];
+    self.waitTimeOutLabel.text = [Util dateTimeOutFromStartTime:self.task.createTime endTime:[Util getTimeNow]];
     self.messageLabel.text = self.task.messageInfo;
     
     [self loadMoreDatas];
@@ -273,39 +273,6 @@
     UIAlertAction * action = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:nil];
     [alert addAction:action];
     [self presentViewController:alert animated:YES completion:nil];
-}
-
-- (NSString *)dateTimeOutFromStartTime:(NSString *)startTime endTime:(NSString *)endTime
-{
-    NSDateFormatter * date = [[NSDateFormatter alloc] init];
-    [date setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-    NSDate * startD = [date dateFromString:startTime];
-    NSDate * endD = [date dateFromString:endTime];
-    NSTimeInterval start = [startD timeIntervalSince1970] * 1;
-    NSTimeInterval end = [endD timeIntervalSince1970] * 1;
-    NSTimeInterval value = end - start;
-    int second = (int)value % 60;
-    int minute = (int)value / 60 % 60;
-    int house = (int)value / 3600 % 24;
-    int day = (int)value / (24 * 3600);
-    NSString * str;
-    if (day != 0)
-    {
-        str = [NSString stringWithFormat:@"%d天%d小时%d分%d秒",day,house,minute,second];
-    }
-    else if (house != 0)
-    {
-        str = [NSString stringWithFormat:@"%d小时%d分%d秒",house,minute,second];
-    }
-    else if (house== 0 && minute!=0)
-    {
-        str = [NSString stringWithFormat:@"%d分%d秒",minute,second];
-    }
-    else
-    {
-        str = [NSString stringWithFormat:@"%d秒",second];
-    }
-    return str;
 }
 
 - (void)didReceiveMemoryWarning {

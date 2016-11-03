@@ -10,4 +10,6 @@
 
 @interface TaskCancelController : UIViewController
 
+@property (nonatomic, copy) NSString * selectDate;
+
 @end

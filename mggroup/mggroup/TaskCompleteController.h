@@ -10,4 +10,6 @@
 
 @interface TaskCompleteController : UIViewController
 
+@property (nonatomic, copy) NSString * selectDate;
+
 @end

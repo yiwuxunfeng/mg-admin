@@ -41,7 +41,7 @@
     
     self.navigationItem.title = self.titleDate;
     
-    self.selectIndex = 1;
+    self.selectIndex = 0;
     self.pageIndex = 1;
     self.tableSelect = NSNotFound;
     if ([self.waiter.dep isEqualToString:@"4"])
@@ -124,16 +124,15 @@
     self.tableSelect = NSNotFound;
     if (self.selectIndex == 0)
     {
-        [self.workNoteArray removeAllObjects];
-        [self.tableView reloadData];
+        [self NETWORK_getWaiterTaskStatistics:self.waiter.waiterId andTaskStatus:@"0" andDate:self.selectDate];
     }
     else if (self.selectIndex ==1)
     {
-        [self NETWORK_getWaiterTaskStatistics:self.waiter.waiterId andTaskStatus:@"0" andDate:self.selectDate];
+        [self NETWORK_getWaiterTaskStatistics:self.waiter.waiterId andTaskStatus:@"1" andDate:self.selectDate];
     }
     else
     {
-        [self NETWORK_getWaiterTaskStatistics:self.waiter.waiterId andTaskStatus:@"1" andDate:self.selectDate];
+        [self NETWORK_getWaiterTaskStatistics:self.waiter.waiterId andTaskStatus:@"9" andDate:self.selectDate];
     }
     [self.tableView.legendFooter resetNoMoreData];
 }
@@ -189,11 +188,12 @@
     NSString * current = [dateFormatter stringFromDate:date];
     NSDictionary * params = @{@"waiterId":waiterId,
                               @"taskStatus":taskStatus,
+                              @"acceptStatus":@"1",
                               @"pageNo":[NSString stringWithFormat:@"%ld",self.pageIndex],
                               @"startDate":[NSString stringWithFormat:@"%@ 00:00:00",current],
                               @"endDate":[NSString stringWithFormat:@"%@ 23:59:59",current]};
     self.waiterTaskStatisticsTask = [[MTRequestNetwork defaultManager]POSTWithTopHead:@"http://"
-                                                                          webURL:URL_WAITER_TASKSTATIC
+                                                                          webURL:URL_GET_TASK_LIST
                                                                           params:params
                                                                       withByUser:YES];
 }
@@ -335,6 +335,16 @@
     else if (self.selectIndex == 0 && self.isCallWaiter == YES)
     {
         TaskNoCompleteCallCell * cell = [tableView dequeueReusableCellWithIdentifier:@"taskNoCompleteCall"];
+        cell.nameLabel.text = @"没有属性";
+        cell.roomCodeLabel.text = @"没有属性";
+        cell.phoneLabel.text = task.phone;
+        cell.currentAreaLabel.text = task.locationArea;
+        cell.createTimeLabel.text = task.createTime;
+        cell.acceptTimeLabel.text = task.acceptTime;
+        cell.acceptTimeOutLabel.text = [Util dateTimeOutFromStartTime:task.createTime endTime:task.acceptTime];
+        cell.serviceTimeOutLabel.text = [Util dateTimeOutFromStartTime:task.acceptTime endTime:[Util getTimeNow]];
+        cell.acceptTypeLabel.text = @"主动接单 没有属性";
+        cell.messageLabel.text = task.messageInfo;
         return cell;
     }
     else if (self.selectIndex == 0 && self.isCallWaiter == NO)
@@ -351,8 +361,8 @@
         cell.currentAreaLabel.text = task.locationArea;
         cell.createTimeLabel.text = task.createTime;
         cell.acceptTimeLabel.text = task.acceptTime;
-        cell.acceptTimeOutLabel.text = [self dateTimeOutFromStartTime:task.createTime endTime:task.acceptTime];
-        cell.serviceTimeOutLabel.text = [self dateTimeOutFromStartTime:task.acceptTime endTime:task.finishTime];
+        cell.acceptTimeOutLabel.text = [Util dateTimeOutFromStartTime:task.createTime endTime:task.acceptTime];
+        cell.serviceTimeOutLabel.text = [Util dateTimeOutFromStartTime:task.acceptTime endTime:task.finishTime];
         cell.acceptStatusLabel.text = @"主动接单 没有属性";
         cell.messageLabel.text = task.messageInfo;
         cell.starView.rating = task.score.floatValue;
@@ -373,8 +383,8 @@
         cell.currentAreaLabel.text = task.locationArea;
         cell.createTimelabel.text = task.createTime;
         cell.acceptTimeLabel.text = task.acceptTime.length <= 0 ? @"接单前被取消" : task.acceptTime;
-        cell.acceptTimeOutLabel.text = task.acceptTime.length <= 0 ? @"接单前被取消" : [self dateTimeOutFromStartTime:task.createTime endTime:task.acceptTime];
-        cell.serviceTimeOutLabel.text = task.acceptTime.length <= 0 ? @"接单前被取消" : [self dateTimeOutFromStartTime:task.acceptTime endTime:task.cancelTime];
+        cell.acceptTimeOutLabel.text = task.acceptTime.length <= 0 ? @"接单前被取消" : [Util dateTimeOutFromStartTime:task.createTime endTime:task.acceptTime];
+        cell.serviceTimeOutLabel.text = task.acceptTime.length <= 0 ? @"接单前被取消" : [Util dateTimeOutFromStartTime:task.acceptTime endTime:task.cancelTime];
         cell.acceptStatusLabel.text = @"没有属性";
         cell.messageLabel.text = task.messageInfo;
         cell.resionLabel.text = @"没有属性";
@@ -444,34 +454,6 @@
         [self NETWORK_getTaskDetail:task];
     }
     [self.tableView reloadSections:indexSet withRowAnimation:UITableViewRowAnimationFade];
-}
-
-- (NSString *)dateTimeOutFromStartTime:(NSString *)startTime endTime:(NSString *)endTime
-{
-    NSDateFormatter * date = [[NSDateFormatter alloc] init];
-    [date setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-    NSDate * startD = [date dateFromString:startTime];
-    NSDate * endD = [date dateFromString:endTime];
-    NSTimeInterval start = [startD timeIntervalSince1970] * 1;
-    NSTimeInterval end = [endD timeIntervalSince1970] * 1;
-    NSTimeInterval value = end - start;
-    int second = (int)value % 60;
-    int minute = (int)value /60 % 60;
-    int house = (int)value / (24 * 3600) % 3600;
-    NSString * str;
-    if (house != 0)
-    {
-        str = [NSString stringWithFormat:@"%d小时%d分%d秒",house,minute,second];
-    }
-    else if (house== 0 && minute!=0)
-    {
-        str = [NSString stringWithFormat:@"%d分%d秒",minute,second];
-    }
-    else
-    {
-        str = [NSString stringWithFormat:@"%d秒",second];
-    }
-    return str;
 }
 
 - (void)didReceiveMemoryWarning {

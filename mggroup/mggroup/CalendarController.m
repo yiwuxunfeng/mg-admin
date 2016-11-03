@@ -17,16 +17,14 @@
 @interface CalendarController () <UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout>
 
 @property (weak, nonatomic) IBOutlet UILabel *yearMonthLabel;
-
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
-
 @property (strong, nonatomic) IBOutlet UIView *chooseDatePickerView;
-
 @property (strong, nonatomic) IBOutlet UIView *chooseDateShadowView;
 
 @property (nonatomic, strong) NSDate * date;
-
 @property (nonatomic, strong) NSDate * today;
+
+@property (nonatomic, assign) NSInteger dateChange;
 
 @property (nonatomic, copy) void(^calendarBlock)(NSInteger day, NSInteger month, NSInteger year);
 
@@ -39,6 +37,7 @@
     
     self.date = [NSDate date];
     self.today = self.date;
+    self.dateChange = 0;
     
     __weak typeof(self) weakSelf = self;
     self.calendarBlock = ^(NSInteger day, NSInteger month, NSInteger year){
@@ -59,12 +58,14 @@
         {
             TaskCancelController * taskCancel = [storyboard instantiateViewControllerWithIdentifier:@"taskCancel"];
             taskCancel.navigationItem.title = [NSString stringWithFormat:@"%ld年%ld月%ld日",year,month,day];
+            taskCancel.selectDate = [NSString stringWithFormat:@"%ld-%02ld-%02ld",year,month,day];
             [weakSelf.navigationController pushViewController:taskCancel animated:YES];
         }
         else if ([weakSelf.controllerType isEqualToString:@"TaskComplete"])
         {
             TaskCompleteController * taskComplete = [storyboard instantiateViewControllerWithIdentifier:@"taskComplete"];
-            taskComplete.navigationItem.title = [NSString stringWithFormat:@"%ld年%ld月%ld日",year,month,day];
+            taskComplete.navigationItem.title = [NSString stringWithFormat:@"%ld年%02ld月%02ld日",year,month,day];
+            taskComplete.selectDate = [NSString stringWithFormat:@"%ld-%ld-%ld",year,month,day];
             [weakSelf.navigationController pushViewController:taskComplete animated:YES];
         }
     };
@@ -85,8 +86,11 @@
 {
     self.chooseDateShadowView.hidden = YES;
     NSInteger change = [noti.object integerValue];
-    if (change == 0)
+    if (change == self.dateChange)
+    {
         return;
+    }
+    self.dateChange = change;
     self.date = [self allMonth:[NSDate date] withMonths:change];
 }
 
@@ -202,8 +206,9 @@
     
     NSInteger daysInThisMonth = [self totaldaysInMonth:_date];
     NSInteger firstWeekday = [self firstWeekdayInThisMonth:_date];
-    NSDateComponents *comp = [[NSCalendar currentCalendar] components:(NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay) fromDate:self.date];
+    NSDateComponents *comp = [[NSCalendar currentCalendar] components:(NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay) fromDate:_date];
     NSDateComponents *beforeComp = [[NSCalendar currentCalendar] components:(NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay) fromDate:self.beforeDate];
+    NSDateComponents *today = [[NSCalendar currentCalendar] components:(NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay) fromDate:self.today];
     
     NSInteger day = 0;
     NSInteger i = indexPath.row;
@@ -219,22 +224,15 @@
         [cell.dateLabel setTextColor:[UIColor colorWithRed:111 / 255.0 green:111 / 255.0 blue:111 / 255.0 alpha:1]];
         
         //this month
-        if ([_today isEqualToDate:_date])
+        if (day == comp.day && (today.year == comp.year && today.month == comp.month))
         {
-            if (day == [self day:_date])
-            {
-                [cell.dateLabel setTextColor:[UIColor colorWithRed:72 / 255.0 green:152 / 255.0 blue:235 / 255.0 alpha:1]];
-            }
-            else if (day > [self day:_date])
-            {
-                [cell.dateLabel setTextColor:[UIColor colorWithRed:203 / 255.0 green:203 / 255.0 blue:203 / 255.0 alpha:1]];
-            }
-            else if (day < beforeComp.day && (beforeComp.year == comp.year && beforeComp.month == comp.month))
-            {
-                [cell.dateLabel setTextColor:[UIColor colorWithRed:203 / 255.0 green:203 / 255.0 blue:203 / 255.0 alpha:1]];
-            }
+            [cell.dateLabel setTextColor:[UIColor colorWithRed:72 / 255.0 green:152 / 255.0 blue:235 / 255.0 alpha:1]];
         }
-        else if ([_today compare:_date] == NSOrderedAscending)
+        else if (day > comp.day && (today.year == comp.year && today.month == comp.month))
+        {
+            [cell.dateLabel setTextColor:[UIColor colorWithRed:203 / 255.0 green:203 / 255.0 blue:203 / 255.0 alpha:1]];
+        }
+        else if (day < beforeComp.day && (beforeComp.year == comp.year && beforeComp.month == comp.month))
         {
             [cell.dateLabel setTextColor:[UIColor colorWithRed:203 / 255.0 green:203 / 255.0 blue:203 / 255.0 alpha:1]];
         }
@@ -253,32 +251,25 @@
     
     NSDateComponents *comp = [[NSCalendar currentCalendar] components:(NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay) fromDate:self.date];
     NSDateComponents *beforeComp = [[NSCalendar currentCalendar] components:(NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay) fromDate:self.beforeDate];
-    BOOL isSameMonth = NO;
-    if (comp.year == beforeComp.year && comp.month == beforeComp.month)
-        isSameMonth = YES;
+    NSDateComponents *today = [[NSCalendar currentCalendar] components:(NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay) fromDate:self.today];
     
     if (i >= firstWeekday && i <= firstWeekday + daysInThisMonth - 1)
     {
         day = i - firstWeekday + 1;
         
-        //this month
-        if ([_today isEqualToDate:_date])
+        if (day > comp.day && (today.year == comp.year && today.month == comp.month))
         {
-            if (day <= [self day:_date] && day >= (isSameMonth ? beforeComp.day : 1))
-            {
-                return YES;
-            }
-            else
-            {
-                return NO;
-            }
+            return NO;
         }
-        else if ([_today compare:_date] == NSOrderedDescending)
+        else if (day < beforeComp.day && (beforeComp.year == comp.year && beforeComp.month == comp.month))
+        {
+            return NO;
+        }
+        else
         {
             return YES;
         }
     }
-    
     return NO;
 }
 

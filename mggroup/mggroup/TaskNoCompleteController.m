@@ -185,14 +185,19 @@
 
 - (void)NETWORK_getTaskList
 {
-    NSDictionary * params = @{@"waiterId":@"224",
-                              @"taskStatus":@"2",
-                              @"pageNo":[NSString stringWithFormat:@"%ld",self.pageIndex],
-                              @"pageCount":@"10"};
+    NSDateFormatter * dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd"];
+    NSString * current = [dateFormatter stringFromDate:[NSDate date]];
+    NSMutableDictionary * params = [NSMutableDictionary dictionaryWithDictionary:@{@"acceptStatus":self.isNoAccept == YES ? @"0" :@"1",
+                                                                                   @"pageNo":[NSString stringWithFormat:@"%ld",self.pageIndex],
+                                                                                   @"startDate":[NSString stringWithFormat:@"%@ 00:00:00",current],
+                                                                                   @"endDate":[NSString stringWithFormat:@"%@ 23:59:59",current]}];
+    if (self.isNoAccept == NO)
+        [params setObject:@"0" forKey:@"status"];
     self.getTaskListTask = [[MTRequestNetwork defaultManager]POSTWithTopHead:@"http://"
-                                                                          webURL:URL_TASK_LIST
-                                                                          params:params
-                                                                      withByUser:YES];
+                                                                               webURL:URL_GET_TASK_LIST
+                                                                               params:params
+                                                                           withByUser:YES];
 }
 
 - (void)RESULT_getTaskListSucceed:(BOOL)succeed withResponseCode:(NSString *)code withMessage:(NSString *)msg withDatas:(NSMutableArray *)datas
@@ -347,7 +352,7 @@
         cell.phoneLabel.text = task.phone;
         cell.currentAreaLabel.text = task.locationArea;
         cell.createTimeLabel.text = task.createTime;
-        cell.waitTimeOutLabel.text = [self dateTimeOutFromStartTime:task.createTime endTime:[Util getTimeNow]];
+        cell.waitTimeOutLabel.text = [Util dateTimeOutFromStartTime:task.createTime endTime:[Util getTimeNow]];
         cell.messageLabel.text = task.messageInfo;
         return cell;
     }
@@ -359,6 +364,16 @@
     else if (self.isNoAccept == NO && self.isCallTask == YES)
     {
         TaskNoCompleteCallCell * cell = [tableView dequeueReusableCellWithIdentifier:@"taskNoCompleteCall"];
+        cell.nameLabel.text = @"没有属性";
+        cell.roomCodeLabel.text = @"没有属性";
+        cell.phoneLabel.text = task.phone;
+        cell.currentAreaLabel.text = task.locationArea;
+        cell.createTimeLabel.text = task.createTime;
+        cell.acceptTimeLabel.text = task.acceptTime;
+        cell.acceptTimeOutLabel.text = [Util dateTimeOutFromStartTime:task.createTime endTime:task.acceptTime];
+        cell.serviceTimeOutLabel.text = [Util dateTimeOutFromStartTime:task.acceptTime endTime:[Util getTimeNow]];
+        cell.acceptTypeLabel.text = @"主动接单 没有属性";
+        cell.messageLabel.text = task.messageInfo;
         return cell;
     }
     else
@@ -428,39 +443,6 @@
     {
         return 340;
     }
-}
-
-- (NSString *)dateTimeOutFromStartTime:(NSString *)startTime endTime:(NSString *)endTime
-{
-    NSDateFormatter * date = [[NSDateFormatter alloc] init];
-    [date setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-    NSDate * startD = [date dateFromString:startTime];
-    NSDate * endD = [date dateFromString:endTime];
-    NSTimeInterval start = [startD timeIntervalSince1970] * 1;
-    NSTimeInterval end = [endD timeIntervalSince1970] * 1;
-    NSTimeInterval value = end - start;
-    int second = (int)value % 60;
-    int minute = (int)value / 60 % 60;
-    int house = (int)value / 3600 % 24;
-    int day = (int)value / (24 * 3600);
-    NSString * str;
-    if (day != 0)
-    {
-        str = [NSString stringWithFormat:@"%d天%d小时%d分%d秒",day,house,minute,second];
-    }
-    else if (house != 0)
-    {
-        str = [NSString stringWithFormat:@"%d小时%d分%d秒",house,minute,second];
-    }
-    else if (house== 0 && minute!=0)
-    {
-        str = [NSString stringWithFormat:@"%d分%d秒",minute,second];
-    }
-    else
-    {
-        str = [NSString stringWithFormat:@"%d秒",second];
-    }
-    return str;
 }
 
 - (void)didReceiveMemoryWarning {

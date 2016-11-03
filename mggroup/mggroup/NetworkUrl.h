@@ -23,4 +23,6 @@
 
 #define URL_TASK_LIST @"/hotelservice/checkin/service/task_array.json"
 
+#define URL_GET_TASK_LIST @"/hotelservice/checkin/service/get_task_array"
+
 #endif /* NetworkUrl_h */

@@ -28,7 +28,6 @@
     self.waiterButton.titleLabel.numberOfLines = 2;
     [self.timeAreaButton setTitle:@"时间/区域\n数据统计" forState:UIControlStateNormal];
     [self.waiterButton setTitle:@"服务人员\n数据统计" forState:UIControlStateNormal];
-    
 }
 
 
@@ -38,6 +37,7 @@
     UIStoryboard * storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     StatisticsDetailController * detail = [storyboard instantiateViewControllerWithIdentifier:@"StatisticsDetailController"];
     detail.isWaiterStatistics = YES;
+    detail.navigationItem.title = @"数据统计";
     detail.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:detail animated:YES];
 }
