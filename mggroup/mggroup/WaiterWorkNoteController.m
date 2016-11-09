@@ -115,6 +115,7 @@
     [self.tableView addLegendHeaderWithRefreshingBlock:^{
         [weakSelf.tableView.legendHeader endRefreshing];
         weakSelf.pageIndex = 1;
+        weakSelf.tableSelect = NSNotFound;
         [weakSelf refreshData];
     }];
 }
@@ -187,7 +188,7 @@
     [dateFormatter setDateFormat:@"yyyy-MM-dd"];
     NSString * current = [dateFormatter stringFromDate:date];
     NSDictionary * params = @{@"waiterId":waiterId,
-                              @"taskStatus":taskStatus,
+                              @"status":taskStatus,
                               @"acceptStatus":@"1",
                               @"pageNo":[NSString stringWithFormat:@"%ld",self.pageIndex],
                               @"startDate":[NSString stringWithFormat:@"%@ 00:00:00",current],
@@ -335,15 +336,15 @@
     else if (self.selectIndex == 0 && self.isCallWaiter == YES)
     {
         TaskNoCompleteCallCell * cell = [tableView dequeueReusableCellWithIdentifier:@"taskNoCompleteCall"];
-        cell.nameLabel.text = @"没有属性";
-        cell.roomCodeLabel.text = @"没有属性";
-        cell.phoneLabel.text = task.phone;
+        cell.nameLabel.text = task.customName.length <= 0 ? @"未知" : task.customName;
+        cell.roomCodeLabel.text = task.roomCode.length <= 0 ? @"未知" : task.roomCode;
+        cell.phoneLabel.text = task.phone.length <= 0 ? @"客人暂未绑定手机" : task.phone;
         cell.currentAreaLabel.text = task.locationArea;
         cell.createTimeLabel.text = task.createTime;
         cell.acceptTimeLabel.text = task.acceptTime;
         cell.acceptTimeOutLabel.text = [Util dateTimeOutFromStartTime:task.createTime endTime:task.acceptTime];
         cell.serviceTimeOutLabel.text = [Util dateTimeOutFromStartTime:task.acceptTime endTime:[Util getTimeNow]];
-        cell.acceptTypeLabel.text = @"主动接单 没有属性";
+        cell.acceptTypeLabel.text = @"主动接单";
         cell.messageLabel.text = task.messageInfo;
         return cell;
     }
@@ -355,18 +356,18 @@
     else if (self.selectIndex == 1 && self.isCallWaiter == YES)
     {
         TaskCompleteCallCell * cell = [tableView dequeueReusableCellWithIdentifier:@"taskCompleteCall"];
-        cell.managerNameLabel.text = @"没有属性";
-        cell.roomCodeLabel.text = @"没有属性";
-        cell.phoneLabel.text = task.phone;
+        cell.managerNameLabel.text = task.customName.length <= 0 ? @"未知" : task.customName;
+        cell.roomCodeLabel.text = task.roomCode.length <= 0 ? @"未知" : task.roomCode;
+        cell.phoneLabel.text = task.phone.length <= 0 ? @"客人暂未绑定手机" : task.phone;
         cell.currentAreaLabel.text = task.locationArea;
         cell.createTimeLabel.text = task.createTime;
         cell.acceptTimeLabel.text = task.acceptTime;
         cell.acceptTimeOutLabel.text = [Util dateTimeOutFromStartTime:task.createTime endTime:task.acceptTime];
         cell.serviceTimeOutLabel.text = [Util dateTimeOutFromStartTime:task.acceptTime endTime:task.finishTime];
-        cell.acceptStatusLabel.text = @"主动接单 没有属性";
+        cell.acceptStatusLabel.text = @"主动接单";
         cell.messageLabel.text = task.messageInfo;
         cell.starView.rating = task.score.floatValue;
-        cell.assessLabel.text = @"没有属性";
+        cell.assessLabel.text = @"暂无评论";
         return cell;
     }
     else if (self.selectIndex == 1 && self.isCallWaiter == NO)
@@ -377,17 +378,17 @@
     else if (self.selectIndex == 2 && self.isCallWaiter == YES)
     {
         TaskCancelCallCell * cell = [tableView dequeueReusableCellWithIdentifier:@"taskCancelCall"];
-        cell.nameLabel.text = @"没有属性";
-        cell.roomCodeLabel.text = @"没有属性";
-        cell.phoneLabel.text = task.phone;
+        cell.nameLabel.text = task.customName.length <= 0 ? @"未知" : task.customName;
+        cell.roomCodeLabel.text = task.roomCode.length <= 0 ? @"未知" : task.roomCode;
+        cell.phoneLabel.text = task.phone.length <= 0 ? @"客人暂未绑定手机" : task.phone;
         cell.currentAreaLabel.text = task.locationArea;
         cell.createTimelabel.text = task.createTime;
         cell.acceptTimeLabel.text = task.acceptTime.length <= 0 ? @"接单前被取消" : task.acceptTime;
         cell.acceptTimeOutLabel.text = task.acceptTime.length <= 0 ? @"接单前被取消" : [Util dateTimeOutFromStartTime:task.createTime endTime:task.acceptTime];
         cell.serviceTimeOutLabel.text = task.acceptTime.length <= 0 ? @"接单前被取消" : [Util dateTimeOutFromStartTime:task.acceptTime endTime:task.cancelTime];
-        cell.acceptStatusLabel.text = @"没有属性";
+        cell.acceptStatusLabel.text = @"主动接单";
         cell.messageLabel.text = task.messageInfo;
-        cell.resionLabel.text = @"没有属性";
+        cell.resionLabel.text = @"暂无评论";
         return cell;
     }
     else

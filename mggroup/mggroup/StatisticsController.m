@@ -34,6 +34,11 @@
 // 点击时间区域统计按钮
 - (IBAction)tapTimeArea:(id)sender
 {
+    UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"提示信息" message:@"暂不支持查看时间/区域统计" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction * action = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:nil];
+    [alert addAction:action];
+    [self presentViewController:alert animated:YES completion:nil];
+    return;
     UIStoryboard * storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     StatisticsDetailController * detail = [storyboard instantiateViewControllerWithIdentifier:@"StatisticsDetailController"];
     detail.isWaiterStatistics = YES;
@@ -45,6 +50,11 @@
 // 点击服务人员统计按钮
 - (IBAction)tapwaiterButton:(id)sender
 {
+    UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"提示信息" message:@"暂不支持查看服务人员统计" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction * action = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:nil];
+    [alert addAction:action];
+    [self presentViewController:alert animated:YES completion:nil];
+    return;
     UIStoryboard * storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     WaiterController * waiter = [storyboard instantiateViewControllerWithIdentifier:@"Waiter"];
     waiter.isWaiterManage = YES;

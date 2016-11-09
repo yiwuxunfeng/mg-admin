@@ -81,8 +81,8 @@
     [formatter setDateFormat:@"yyyy年MM月dd日"];
     self.currentDateLabel.text = [formatter stringFromDate:date];
     
-    [self refreshDatas];
     [self loadMoreDatas];
+    [self refreshDatas];
     [self NETWORK_getTaskList];
 }
 
@@ -140,6 +140,8 @@
     [self.tableView addLegendHeaderWithRefreshingBlock:^{
         [weakSelf.tableView.legendHeader endRefreshing];
         weakSelf.pageIndex = 1;
+        weakSelf.selectSection = NSNotFound;
+        [weakSelf.tableView.legendFooter resetNoMoreData];
         [weakSelf NETWORK_getTaskList];
     }];
 }
@@ -189,11 +191,10 @@
     [dateFormatter setDateFormat:@"yyyy-MM-dd"];
     NSString * current = [dateFormatter stringFromDate:[NSDate date]];
     NSMutableDictionary * params = [NSMutableDictionary dictionaryWithDictionary:@{@"acceptStatus":self.isNoAccept == YES ? @"0" :@"1",
+                                                                                   @"status":@"0",
                                                                                    @"pageNo":[NSString stringWithFormat:@"%ld",self.pageIndex],
                                                                                    @"startDate":[NSString stringWithFormat:@"%@ 00:00:00",current],
                                                                                    @"endDate":[NSString stringWithFormat:@"%@ 23:59:59",current]}];
-    if (self.isNoAccept == NO)
-        [params setObject:@"0" forKey:@"status"];
     self.getTaskListTask = [[MTRequestNetwork defaultManager]POSTWithTopHead:@"http://"
                                                                                webURL:URL_GET_TASK_LIST
                                                                                params:params
@@ -347,9 +348,9 @@
     else if (self.isNoAccept == YES && self.isCallTask == YES)
     {
         TaskNoAcceptCallCell * cell = [tableView dequeueReusableCellWithIdentifier:@"taskNoAcceptCall"];
-        cell.nameLabel.text = @"没有属性";
-        cell.roomCodeLabel.text = @"没有属性";
-        cell.phoneLabel.text = task.phone;
+        cell.nameLabel.text = task.customName.length <= 0 ? @"未知" : task.customName;
+        cell.roomCodeLabel.text = task.roomCode.length <= 0 ? @"未知" : task.roomCode;
+        cell.phoneLabel.text = task.phone.length <= 0 ? @"客人暂未绑定手机" : task.phone;
         cell.currentAreaLabel.text = task.locationArea;
         cell.createTimeLabel.text = task.createTime;
         cell.waitTimeOutLabel.text = [Util dateTimeOutFromStartTime:task.createTime endTime:[Util getTimeNow]];
@@ -364,15 +365,15 @@
     else if (self.isNoAccept == NO && self.isCallTask == YES)
     {
         TaskNoCompleteCallCell * cell = [tableView dequeueReusableCellWithIdentifier:@"taskNoCompleteCall"];
-        cell.nameLabel.text = @"没有属性";
-        cell.roomCodeLabel.text = @"没有属性";
-        cell.phoneLabel.text = task.phone;
+        cell.nameLabel.text = task.customName.length <= 0 ? @"未知" : task.customName;
+        cell.roomCodeLabel.text = task.roomCode.length <= 0 ? @"未知" : task.roomCode;
+        cell.phoneLabel.text = task.phone.length <= 0 ? @"客人暂未绑定手机" : task.phone;
         cell.currentAreaLabel.text = task.locationArea;
         cell.createTimeLabel.text = task.createTime;
         cell.acceptTimeLabel.text = task.acceptTime;
         cell.acceptTimeOutLabel.text = [Util dateTimeOutFromStartTime:task.createTime endTime:task.acceptTime];
         cell.serviceTimeOutLabel.text = [Util dateTimeOutFromStartTime:task.acceptTime endTime:[Util getTimeNow]];
-        cell.acceptTypeLabel.text = @"主动接单 没有属性";
+        cell.acceptTypeLabel.text = @"主动接单";
         cell.messageLabel.text = task.messageInfo;
         return cell;
     }

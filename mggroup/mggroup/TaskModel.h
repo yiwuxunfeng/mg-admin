@@ -33,6 +33,9 @@
 @property (nonatomic, copy) NSString * status;
 @property (nonatomic, copy) NSString * waiterLocation;
 @property (nonatomic, copy) NSString * waiterDeviceId;
+@property (nonatomic, copy) NSString * customName;
+@property (nonatomic, copy) NSString * roomCode;
+@property (nonatomic, copy) NSString * roomDesc;
 
 - (void)setTaskByTaskModel:(TaskModel *)taskModel;
 

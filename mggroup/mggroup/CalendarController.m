@@ -58,13 +58,13 @@
         {
             TaskCancelController * taskCancel = [storyboard instantiateViewControllerWithIdentifier:@"taskCancel"];
             taskCancel.navigationItem.title = [NSString stringWithFormat:@"%ld年%ld月%ld日",year,month,day];
-            taskCancel.selectDate = [NSString stringWithFormat:@"%ld-%02ld-%02ld",year,month,day];
+            taskCancel.selectDate = [NSString stringWithFormat:@"%ld-%ld-%ld",year,month,day];
             [weakSelf.navigationController pushViewController:taskCancel animated:YES];
         }
         else if ([weakSelf.controllerType isEqualToString:@"TaskComplete"])
         {
             TaskCompleteController * taskComplete = [storyboard instantiateViewControllerWithIdentifier:@"taskComplete"];
-            taskComplete.navigationItem.title = [NSString stringWithFormat:@"%ld年%02ld月%02ld日",year,month,day];
+            taskComplete.navigationItem.title = [NSString stringWithFormat:@"%ld年%ld月%ld日",year,month,day];
             taskComplete.selectDate = [NSString stringWithFormat:@"%ld-%ld-%ld",year,month,day];
             [weakSelf.navigationController pushViewController:taskComplete animated:YES];
         }

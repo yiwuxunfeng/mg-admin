@@ -109,6 +109,8 @@
     [self.tableView addLegendHeaderWithRefreshingBlock:^{
         [weakSelf.tableView.legendHeader endRefreshing];
         weakSelf.pageIndex = 1;
+        weakSelf.selectSection = NSNotFound;
+        [weakSelf.tableView.legendFooter resetNoMoreData];
         [weakSelf NETWORK_getTaskList];
     }];
 }
@@ -151,14 +153,11 @@
 
 - (void)NETWORK_getTaskList
 {
-    NSDateFormatter * dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"yyyy-MM-dd"];
-    NSString * current = [dateFormatter stringFromDate:[NSDate date]];
     NSMutableDictionary * params = [NSMutableDictionary dictionaryWithDictionary:@{@"acceptStatus":@"1",
                                                                                    @"status":@"1",
                                                                                    @"pageNo":[NSString stringWithFormat:@"%ld",self.pageIndex],
-                                                                                   @"startDate":[NSString stringWithFormat:@"%@ 00:00:00",current],
-                                                                                   @"endDate":[NSString stringWithFormat:@"%@ 23:59:59",current]}];
+                                                                                   @"startDate":[NSString stringWithFormat:@"%@ 00:00:00",self.selectDate],
+                                                                                   @"endDate":[NSString stringWithFormat:@"%@ 23:59:59",self.selectDate]}];
     self.getTaskListTask = [[MTRequestNetwork defaultManager]POSTWithTopHead:@"http://"
                                                                       webURL:URL_GET_TASK_LIST
                                                                       params:params
@@ -319,18 +318,18 @@
     else if (self.isCallTask == YES)
     {
         TaskCompleteCallCell * cell = [tableView dequeueReusableCellWithIdentifier:@"taskCompleteCall"];
-        cell.managerNameLabel.text = @"没有属性";
-        cell.roomCodeLabel.text = @"没有属性";
-        cell.phoneLabel.text = task.phone;
+        cell.managerNameLabel.text = task.customName.length <= 0 ? @"未知" : task.customName;
+        cell.roomCodeLabel.text = task.roomCode.length <= 0 ? @"未知" : task.roomCode;
+        cell.phoneLabel.text = task.phone.length <= 0 ? @"客人暂未绑定手机" : task.phone;
         cell.currentAreaLabel.text = task.locationArea;
         cell.createTimeLabel.text = task.createTime;
         cell.acceptTimeLabel.text = task.acceptTime;
         cell.acceptTimeOutLabel.text = [Util dateTimeOutFromStartTime:task.createTime endTime:task.acceptTime];
         cell.serviceTimeOutLabel.text = [Util dateTimeOutFromStartTime:task.acceptTime endTime:task.finishTime];
-        cell.acceptStatusLabel.text = @"主动接单 没有属性";
+        cell.acceptStatusLabel.text = @"主动接单";
         cell.messageLabel.text = task.messageInfo;
         cell.starView.rating = task.score.floatValue;
-        cell.assessLabel.text = @"没有属性";
+        cell.assessLabel.text = @"暂无评论";
         return cell;
     }
     else

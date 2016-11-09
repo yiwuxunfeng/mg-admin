@@ -188,13 +188,8 @@
     
     task.cancelTime = dic[@"cancelTime"];
     task.confirmState = dic[@"confirmState"];
-    task.acceptTime = dic[@"progressInfo"][@"acceptTime"];
-    task.createTime = dic[@"progressInfo"][@"createTime"];
-    task.waiterDeviceId = dic[@"progressInfo"][@"deviceId"];
-    task.finishTime = dic[@"progressInfo"][@"finishTime"];
-    task.waiterLocation = dic[@"progressInfo"][@"location"];
-    task.workNum = dic[@"progressInfo"][@"workNum"];
-    task.status = dic[@"status"];
+    NSDictionary * progress = (NSDictionary *)dic[@"progressInfo"];
+    task.status = [NSString stringWithFormat:@"%@",dic[@"status"]];
     task.category = dic[@"taskInfo"][@"category"];
     task.deviceId = dic[@"taskInfo"][@"diviceId"];
     task.drorderNo = dic[@"taskInfo"][@"drOrderNo"];
@@ -206,7 +201,19 @@
     task.priority = dic[@"taskInfo"][@"priority"];
     task.taskCode = dic[@"taskInfo"][@"taskCode"];
     task.timeLimit = dic[@"taskInfo"][@"timeLimit"];
-    
+    task.phone = dic[@"taskInfo"][@"customPhone"];
+    task.customName = dic[@"taskInfo"][@"customName"];
+    task.roomCode = dic[@"taskInfo"][@"roomCode"];
+    task.roomDesc = dic[@"taskInfo"][@"roomDesc"];
+    if (![progress isEqual: @""])
+    {
+        task.acceptTime = dic[@"progressInfo"][@"acceptTime"];
+        task.createTime = dic[@"progressInfo"][@"createTime"];
+        task.waiterDeviceId = dic[@"progressInfo"][@"deviceId"];
+        task.finishTime = dic[@"progressInfo"][@"finishTime"];
+        task.waiterLocation = dic[@"progressInfo"][@"location"];
+        task.workNum = dic[@"progressInfo"][@"workNum"];
+    }
     [array addObject:task];
     return array;
 }
@@ -266,11 +273,14 @@
         task.locationDesc = taskDic[@"locationDesc"];
         task.messageInfo = taskDic[@"messageInfo"];
         task.patternInfo = taskDic[@"patternInfo"];
-        task.phone = taskDic[@"phone"];
+        task.phone = taskDic[@"customPhone"];
         task.priority = taskDic[@"priority"];
         task.score = taskDic[@"score"];
         task.taskCode = taskDic[@"taskCode"];
         task.timeLimit = taskDic[@"timeLimit"];
+        task.customName = taskDic[@"customName"];
+        task.roomCode = taskDic[@"roomCode"];
+        task.roomDesc = taskDic[@"roomDesc"];
         [array addObject:task];
     }
     NSMutableDictionary * dictionary = [NSMutableDictionary dictionary];

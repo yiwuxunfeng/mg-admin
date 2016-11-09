@@ -41,9 +41,9 @@
     
     self.navigationItem.title = @"任务分配";
     
-    self.nameLabel.text = @"没有属性";
-    self.roomCodeLabel.text = @"没有属性";
-    self.phoneLabel.text = self.task.phone;
+    self.nameLabel.text = self.task.customName.length <= 0 ? @"未知" : self.task.customName;
+    self.roomCodeLabel.text = self.task.roomCode.length <= 0 ? @"未知" : self.task.roomCode;
+    self.phoneLabel.text = self.task.phone.length <= 0 ? @"客人暂未绑定手机" : self.task.phone;
     self.currentAreaLabel.text = self.task.locationArea;
     self.createTimeLabel.text = self.task.createTime;
     self.waitTimeOutLabel.text = [Util dateTimeOutFromStartTime:self.task.createTime endTime:[Util getTimeNow]];
