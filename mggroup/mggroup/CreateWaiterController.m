@@ -262,7 +262,7 @@
             waiter.dep = [NSString stringWithFormat:@"%ld",self.department.selectIndex + 1];
             waiter.gender = [NSString stringWithFormat:@"%ld",self.selectSex];
             waiter.workNum = self.waiterNumLabel.text;
-            waiter.currentArea = @"0";
+            waiter.currentArea = self.department.selectIndex == 1 ? @"送餐部" : @"0";
             UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"提示信息" message:@"确认新建服务员吗？" preferredStyle:UIAlertControllerStyleAlert];
             UIAlertAction * action1 = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
             UIAlertAction * action2 = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {

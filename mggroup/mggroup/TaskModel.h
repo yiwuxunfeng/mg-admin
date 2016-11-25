@@ -11,6 +11,7 @@
 @interface TaskModel : NSObject
 
 @property (nonatomic, copy) NSString * category;
+@property (nonatomic, copy) NSString * acceptStatus;
 @property (nonatomic, copy) NSString * confirmState;
 @property (nonatomic, copy) NSString * createTime;
 @property (nonatomic, copy) NSString * deviceId;

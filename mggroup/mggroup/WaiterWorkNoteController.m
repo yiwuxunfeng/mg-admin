@@ -351,6 +351,17 @@
     else if (self.selectIndex == 0 && self.isCallWaiter == NO)
     {
         TaskNoCompleteMenuCell * cell = [tableView dequeueReusableCellWithIdentifier:@"taskNoCompleteMenu"];
+        cell.customNameLabel.text = task.customName.length <= 0 ? @"未知" : task.customName;
+        cell.roomCodeLabel.text = task.roomCode.length <= 0 ? @"未知" : task.roomCode;
+        cell.phoneLabel.text = task.phone.length <= 0 ? @"客人暂未绑定手机" : task.phone;
+        cell.currentAreaLabel.text = task.locationArea;
+        cell.createTimeLabel.text = task.createTime;
+        cell.acceptTimeLabel.text = task.acceptTime;
+        cell.acceptTimeOutLabel.text = [Util dateTimeOutFromStartTime:task.createTime endTime:task.acceptTime];
+        cell.timeLimitLabel.text = task.timeLimit;
+        cell.outTimeLabel.text = [Util dateTimeOutFromStartTime:task.timeLimit endTime:[Util getTimeNow]];
+        cell.acceptStatusLabel.text = @"主动接单";
+        cell.menuDetailLabel.text = task.messageInfo;
         return cell;
     }
     else if (self.selectIndex == 1 && self.isCallWaiter == YES)
@@ -373,6 +384,20 @@
     else if (self.selectIndex == 1 && self.isCallWaiter == NO)
     {
         TaskCompleteMenuCell * cell = [tableView dequeueReusableCellWithIdentifier:@"taskCompleteMenu"];
+        cell.customNameLabel.text = task.customName.length <= 0 ? @"未知" : task.customName;
+        cell.roomCodeLabel.text = task.roomCode.length <= 0 ? @"未知" : task.roomCode;
+        cell.phoneLabel.text = task.phone.length <= 0 ? @"客人暂未绑定手机" : task.phone;
+        cell.currentAreaLabel.text = task.locationArea;
+        cell.createTimeLabel.text = task.createTime;
+        cell.acceptTimeLabel.text = task.acceptTime;
+        cell.acceptTimeOutLabel.text = [Util dateTimeOutFromStartTime:task.createTime endTime:task.acceptTime];
+        cell.timeLimitLabel.text = task.timeLimit;
+        cell.finishTimeLabel.text = task.finishTime;
+        cell.outTimeLabel.text = [Util dateTimeOutFromStartTime:task.timeLimit endTime:task.finishTime];
+        cell.acceptStatusLabel.text = @"主动接单";
+        cell.menuDetailLabel.text = task.messageInfo;
+        cell.taskScoreLabel.rating = task.score.floatValue;
+        cell.assessLabel.text = @"暂无评论";
         return cell;
     }
     else if (self.selectIndex == 2 && self.isCallWaiter == YES)
@@ -388,12 +413,24 @@
         cell.serviceTimeOutLabel.text = task.acceptTime.length <= 0 ? @"接单前被取消" : [Util dateTimeOutFromStartTime:task.acceptTime endTime:task.cancelTime];
         cell.acceptStatusLabel.text = @"主动接单";
         cell.messageLabel.text = task.messageInfo;
-        cell.resionLabel.text = @"暂无评论";
+        cell.resionLabel.text = @"暂无";
         return cell;
     }
     else
     {
         TaskCancelMenuCell * cell = [tableView dequeueReusableCellWithIdentifier:@"taskCancelMenu"];
+        cell.customNameLabel.text = task.customName.length <= 0 ? @"未知" : task.customName;
+        cell.roomCodeLabel.text = task.roomCode.length <= 0 ? @"未知" : task.roomCode;
+        cell.phoneLabel.text = task.phone.length <= 0 ? @"客人暂未绑定手机" : task.phone;
+        cell.currentAreaLabel.text = task.locationArea;
+        cell.createTimeLabel.text = task.createTime;
+        cell.acceptTimeLabel.text = task.acceptTime.length <= 0 ? @"接单前被取消" : task.acceptTime;
+        cell.acceptTimeOutLabel.text = task.acceptTime.length <= 0 ? @"接单前被取消" : [Util dateTimeOutFromStartTime:task.createTime endTime:task.acceptTime];
+        cell.timeLimitLabel.text = task.timeLimit;
+        cell.outTimeLabel.text = [Util dateTimeOutFromStartTime:task.timeLimit endTime:task.finishTime];
+        cell.acceptStatusLabel.text = @"主动接单";
+        cell.menuDetailLabel.text = task.messageInfo;
+        cell.resionLabel.text = @"暂无";
         return cell;
     }
 }
@@ -426,7 +463,7 @@
     }
     else
     {
-        return 250;
+        return 370;
     }
 }
 

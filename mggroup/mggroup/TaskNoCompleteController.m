@@ -154,20 +154,18 @@
             return;
         self.callTaskView.backgroundColor = [UIColor colorWithRed:85 / 255.0f green:85 / 255.0f blue:85 / 255.0f alpha:1.0f];
         self.menuTaskView.backgroundColor = [UIColor whiteColor];
+        self.callTaskView.textColor = [UIColor whiteColor];
+        self.menuTaskView.textColor = [UIColor blackColor];
         self.isCallTask = YES;
     }
     else
     {
-        // 暂时屏蔽
-        UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"提示信息" message:@"暂不支持查看送餐任务" preferredStyle:UIAlertControllerStyleAlert];
-        UIAlertAction * action = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:nil];
-        [alert addAction:action];
-        [self presentViewController:alert animated:YES completion:nil];
-        return;
         if (self.isCallTask == NO)
             return;
         self.callTaskView.backgroundColor = [UIColor whiteColor];
         self.menuTaskView.backgroundColor = [UIColor colorWithRed:85 / 255.0f green:85 / 255.0f blue:85 / 255.0f alpha:1.0f];
+        self.callTaskView.textColor = [UIColor blackColor];
+        self.menuTaskView.textColor = [UIColor whiteColor];
         self.isCallTask = NO;
     }
     self.selectSection = NSNotFound;
@@ -192,6 +190,7 @@
     NSString * current = [dateFormatter stringFromDate:[NSDate date]];
     NSMutableDictionary * params = [NSMutableDictionary dictionaryWithDictionary:@{@"acceptStatus":self.isNoAccept == YES ? @"0" :@"1",
                                                                                    @"status":@"0",
+                                                                                   @"category":self.isCallTask == YES ? @"0" : @"4",
                                                                                    @"pageNo":[NSString stringWithFormat:@"%ld",self.pageIndex],
                                                                                    @"startDate":[NSString stringWithFormat:@"%@ 00:00:00",current],
                                                                                    @"endDate":[NSString stringWithFormat:@"%@ 23:59:59",current]}];
@@ -360,6 +359,14 @@
     else if (self.isNoAccept == YES && self.isCallTask == NO)
     {
         TaskNoAcceptMenuCell * cell = [tableView dequeueReusableCellWithIdentifier:@"taskNoAcceptMenu"];
+        cell.customNameLabel.text = task.customName.length <= 0 ? @"未知" : task.customName;
+        cell.roomCodeLabel.text = task.roomCode.length <= 0 ? @"未知" : task.roomCode;
+        cell.phoneLabel.text = task.phone.length <= 0 ? @"客人暂未绑定手机" : task.phone;
+        cell.currentAreaLabel.text = task.locationArea;
+        cell.createTimeLabel.text = task.createTime;
+        cell.waitTimeLabel.text = [Util dateTimeOutFromStartTime:task.createTime endTime:[Util getTimeNow]];
+        cell.timeLimitLabel.text = task.timeLimit;
+        cell.menuDetailLabel.text = task.messageInfo;
         return cell;
     }
     else if (self.isNoAccept == NO && self.isCallTask == YES)
@@ -380,6 +387,17 @@
     else
     {
         TaskNoCompleteMenuCell * cell = [tableView dequeueReusableCellWithIdentifier:@"taskNoCompleteMenu"];
+        cell.customNameLabel.text = task.customName.length <= 0 ? @"未知" : task.customName;
+        cell.roomCodeLabel.text = task.roomCode.length <= 0 ? @"未知" : task.roomCode;
+        cell.phoneLabel.text = task.phone.length <= 0 ? @"客人暂未绑定手机" : task.phone;
+        cell.currentAreaLabel.text = task.locationArea;
+        cell.createTimeLabel.text = task.createTime;
+        cell.acceptTimeLabel.text = task.acceptTime;
+        cell.acceptTimeOutLabel.text = [Util dateTimeOutFromStartTime:task.createTime endTime:task.acceptTime];
+        cell.timeLimitLabel.text = task.timeLimit;
+        cell.outTimeLabel.text = [Util dateTimeOutFromStartTime:task.timeLimit endTime:[Util getTimeNow]];
+        cell.acceptStatusLabel.text = @"主动接单";
+        cell.menuDetailLabel.text = task.messageInfo;
         return cell;
     }
 }

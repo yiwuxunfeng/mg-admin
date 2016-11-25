@@ -193,6 +193,7 @@
     task.category = dic[@"taskInfo"][@"category"];
     task.deviceId = dic[@"taskInfo"][@"diviceId"];
     task.drorderNo = dic[@"taskInfo"][@"drOrderNo"];
+    task.acceptStatus = dic[@"taskInfo"][@"acceptStatus"];
     task.location = dic[@"taskInfo"][@"location"];
     task.locationArea = dic[@"taskInfo"][@"locationArea"];
     task.locationDesc = dic[@"taskInfo"][@"locationDesc"];

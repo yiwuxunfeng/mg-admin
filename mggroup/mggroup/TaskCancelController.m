@@ -10,6 +10,8 @@
 #import "TaskCancelCallCell.h"
 #import "TaskCancelMenuCell.h"
 #import "TaskCodeCell.h"
+#import "TaskNoAcceptCancelCallCell.h"
+#import "TaskNoAcceptCancelMenuCell.h"
 
 @interface TaskCancelController () <UITableViewDelegate,UITableViewDataSource,MTRequestNetWorkDelegate>
 
@@ -135,19 +137,20 @@
         if (self.isCallTask == YES)
             return;
         self.isCallTask = YES;
-        self.callChooseView.backgroundColor = [UIColor lightGrayColor];
+        self.callChooseView.backgroundColor = [UIColor colorWithRed:85 / 255.0f green:85 / 255.0f blue:85 / 255.0f alpha:1.0f];
         self.menuChooseView.backgroundColor = [UIColor whiteColor];
+        self.callChooseView.textColor = [UIColor whiteColor];
+        self.menuChooseView.textColor = [UIColor blackColor];
     }
     else
     {
-        UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"提示信息" message:@"暂不支持查询送餐任务" preferredStyle:UIAlertControllerStyleAlert];
-        UIAlertAction * action = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:nil];
-        [alert addAction:action];
-        [self presentViewController:alert animated:YES completion:nil];
-        return;
+        if (self.isCallTask == NO)
+            return;
         self.isCallTask = NO;
         self.callChooseView.backgroundColor = [UIColor whiteColor];
-        self.menuChooseView.backgroundColor = [UIColor lightGrayColor];
+        self.menuChooseView.backgroundColor = [UIColor colorWithRed:85 / 255.0f green:85 / 255.0f blue:85 / 255.0f alpha:1.0f];
+        self.callChooseView.textColor = [UIColor blackColor];
+        self.menuChooseView.textColor = [UIColor whiteColor];
     }
     self.selectSection = NSNotFound;
     [self refreshData];
@@ -191,6 +194,7 @@
 - (void)NETWORK_getTaskList
 {
     NSMutableDictionary * params = [NSMutableDictionary dictionaryWithDictionary:@{@"status":@"9",
+                                                                                   @"category":self.isCallTask == YES ? @"0" : @"4",
                                                                                    @"pageNo":[NSString stringWithFormat:@"%ld",self.pageIndex],
                                                                                    @"startDate":[NSString stringWithFormat:@"%@ 00:00:00",self.selectDate],
                                                                                    @"endDate":[NSString stringWithFormat:@"%@ 23:59:59",self.selectDate]}];
@@ -329,17 +333,32 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    TaskModel * task = self.taskArray[indexPath.section];
     if (indexPath.row == 0)
     {
         return 44;
     }
     else if (self.isCallTask == YES)
     {
-        return 340;
+        if ([task.acceptStatus isEqualToString:@"1"] == YES)
+        {
+            return 340;
+        }
+        else
+        {
+            return 250;
+        }
     }
     else
     {
-        return 250;
+        if ([task.acceptStatus isEqualToString:@"1"] == YES)
+        {
+            return 370;
+        }
+        else
+        {
+            return 280;
+        }
     }
 }
 
@@ -355,24 +374,69 @@
     }
     else if (self.isCallTask == YES)
     {
-        TaskCancelCallCell * cell = [tableView dequeueReusableCellWithIdentifier:@"taskCancelCall"];
-        cell.nameLabel.text = task.customName.length <= 0 ? @"未知" : task.customName;
-        cell.roomCodeLabel.text = task.roomCode.length <= 0 ? @"未知" : task.roomCode;
-        cell.phoneLabel.text = task.phone.length <= 0 ? @"客人暂未绑定手机" : task.phone;
-        cell.currentAreaLabel.text = task.locationArea;
-        cell.createTimelabel.text = task.createTime;
-        cell.acceptTimeLabel.text = task.acceptTime.length <= 0 ? @"接单前被取消" : task.acceptTime;
-        cell.acceptTimeOutLabel.text = task.acceptTime.length <= 0 ? @"接单前被取消" : [Util dateTimeOutFromStartTime:task.createTime endTime:task.acceptTime];
-        cell.serviceTimeOutLabel.text = task.acceptTime.length <= 0 ? @"接单前被取消" : [Util dateTimeOutFromStartTime:task.acceptTime endTime:task.cancelTime];
-        cell.acceptStatusLabel.text = @"自主接单";
-        cell.messageLabel.text = task.messageInfo;
-        cell.resionLabel.text = @"暂无评论";
-        return cell;
+        if ([task.acceptStatus isEqualToString:@"1"] == YES)
+        {
+            TaskCancelCallCell * cell = [tableView dequeueReusableCellWithIdentifier:@"taskCancelCall"];
+            cell.nameLabel.text = task.customName.length <= 0 ? @"未知" : task.customName;
+            cell.roomCodeLabel.text = task.roomCode.length <= 0 ? @"未知" : task.roomCode;
+            cell.phoneLabel.text = task.phone.length <= 0 ? @"客人暂未绑定手机" : task.phone;
+            cell.currentAreaLabel.text = task.locationArea;
+            cell.createTimelabel.text = task.createTime;
+            cell.acceptTimeLabel.text = task.acceptTime.length <= 0 ? @"接单前被取消" : task.acceptTime;
+            cell.acceptTimeOutLabel.text = task.acceptTime.length <= 0 ? @"接单前被取消" : [Util dateTimeOutFromStartTime:task.createTime endTime:task.acceptTime];
+            cell.serviceTimeOutLabel.text = task.acceptTime.length <= 0 ? @"接单前被取消" : [Util dateTimeOutFromStartTime:task.acceptTime endTime:task.cancelTime];
+            cell.acceptStatusLabel.text = @"自主接单";
+            cell.messageLabel.text = task.messageInfo;
+            cell.resionLabel.text = @"暂无";
+            return cell;
+        }
+        else
+        {
+            TaskNoAcceptCancelCallCell * cell = [tableView dequeueReusableCellWithIdentifier:@"taskNoAcceptCancelCall"];
+            cell.customNameLabel.text = task.customName.length <= 0 ? @"未知" : task.customName;
+            cell.roomCodeLabel.text = task.roomCode.length <= 0 ? @"未知" : task.roomCode;
+            cell.phoneLabel.text = task.phone.length <= 0 ? @"客人暂未绑定手机" : task.phone;
+            cell.currentAreaLabel.text = task.locationArea;
+            cell.createTimeLabel.text = task.createTime;
+            cell.waitTimeLabel.text = [Util dateTimeOutFromStartTime:task.createTime endTime:[Util getTimeNow]];
+            cell.taskDetailLabel.text = task.messageInfo;
+            cell.resionLabel.text = @"暂无";
+            return cell;
+        }
     }
     else
     {
-        TaskCancelMenuCell * cell = [tableView dequeueReusableCellWithIdentifier:@"taskCancelMenu"];
-        return cell;
+        if ([task.acceptStatus isEqualToString:@"1"] == YES)
+        {
+            TaskCancelMenuCell * cell = [tableView dequeueReusableCellWithIdentifier:@"taskCancelMenu"];
+            cell.customNameLabel.text = task.customName.length <= 0 ? @"未知" : task.customName;
+            cell.roomCodeLabel.text = task.roomCode.length <= 0 ? @"未知" : task.roomCode;
+            cell.phoneLabel.text = task.phone.length <= 0 ? @"客人暂未绑定手机" : task.phone;
+            cell.currentAreaLabel.text = task.locationArea;
+            cell.createTimeLabel.text = task.createTime;
+            cell.acceptTimeLabel.text = task.acceptTime.length <= 0 ? @"接单前被取消" : task.acceptTime;
+            cell.acceptTimeOutLabel.text = task.acceptTime.length <= 0 ? @"接单前被取消" : [Util dateTimeOutFromStartTime:task.createTime endTime:task.acceptTime];
+            cell.timeLimitLabel.text = task.timeLimit;
+            cell.outTimeLabel.text = [Util dateTimeOutFromStartTime:task.timeLimit endTime:task.finishTime];
+            cell.acceptStatusLabel.text = @"主动接单";
+            cell.menuDetailLabel.text = task.messageInfo;
+            cell.resionLabel.text = @"暂无";
+            return cell;
+        }
+        else
+        {
+            TaskNoAcceptCancelMenuCell * cell = [tableView dequeueReusableCellWithIdentifier:@"taskNoAcceptCancelMenu"];
+            cell.customNameLabel.text = task.customName.length <= 0 ? @"未知" : task.customName;
+            cell.roomCodeLabel.text = task.roomCode.length <= 0 ? @"未知" : task.roomCode;
+            cell.phoneLabel.text = task.phone.length <= 0 ? @"客人暂未绑定手机" : task.phone;
+            cell.currentAreaLabel.text = task.locationArea;
+            cell.createTimeLabel.text = task.createTime;
+            cell.timeLimitLabel.text = task.timeLimit;
+            cell.waitTimeLabel.text = [Util dateTimeOutFromStartTime:task.createTime endTime:[Util getTimeNow]];
+            cell.menuDetailLabel.text = task.messageInfo;
+            cell.resionLabel.text = @"暂无";
+            return cell;
+        }
     }
 }
 

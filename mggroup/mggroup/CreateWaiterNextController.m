@@ -46,7 +46,7 @@
     if (self.department == nil)
     {
         self.department = [[DropDownView alloc]initWithFrame:CGRectMake(self.view.frame.size.width / 4,self.departmentLabel.frame.origin.y + self.departmentLabel.frame.size.height + 15,self.view.frame.size.width / 2, 250)];
-        self.department.tableArray = @[@"全区域",@"国际会展中心",@"椰林酒店",@"棕榈酒店",@"大王棕酒店",@"皇后棕酒店",@"菩提酒店",@"木棉酒店A",@"木棉酒店B",@"水乐园",@"水乐园前广场",@"海鲜广场",@"皇后广场",@"东南亚风情街",@"酒店主大堂"];
+        self.department.tableArray = @[@"全区域",@"会议中心",@"椰林酒店",@"棕榈酒店",@"大王棕酒店",@"皇后棕酒店",@"菩提酒店",@"木棉酒店A",@"木棉酒店B",@"海鲜广场",@"水乐园",@"水乐园前广场",@"东南亚风情街",@"酒店大堂",@"大堂后院",@"皇后广场"];
         self.department.textField.placeholder = @"请选负责区域";
         [self.view addSubview:self.department];
     }
@@ -107,9 +107,12 @@
             MTWaiter * waiter = datas[0];
             UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"提示信息" message:@"创建服务员成功" preferredStyle:UIAlertControllerStyleAlert];
             UIAlertAction * action = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-                [SaveHeadImage saveHeadImageByWaiterId:waiter.waiterId andWithImage:self.faceImage];
-                waiter.facePic = @"1";
-                [[AppDelegate sharedDelegate] saveContext];
+                if (self.faceImage)
+                {
+                    [SaveHeadImage saveHeadImageByWaiterId:waiter.waiterId andWithImage:self.faceImage];
+                    waiter.facePic = @"1";
+                    [[AppDelegate sharedDelegate] saveContext];
+                }
                 [self.navigationController popToRootViewControllerAnimated:YES];
             }];
             [alert addAction:action];

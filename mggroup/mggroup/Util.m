@@ -661,20 +661,29 @@ void ProviderReleaseData (void *info, const void *data, size_t size){
 {
     NSDateFormatter * date = [[NSDateFormatter alloc] init];
     [date setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-    NSDate * startD = [date dateFromString:startTime];
-    NSDate * endD = [date dateFromString:endTime];
-    NSTimeInterval start = [startD timeIntervalSince1970] * 1;
-    NSTimeInterval end = [endD timeIntervalSince1970] * 1;
+    NSDate * startDate = [date dateFromString:startTime];
+    NSDate * endDate = [date dateFromString:endTime];
+    NSTimeInterval start = [startDate timeIntervalSince1970] * 1;
+    NSTimeInterval end = [endDate timeIntervalSince1970] * 1;
     NSTimeInterval value = end - start;
-    int second = (int)value % 60;
-    int minute = (int)value /60 % 60;
-    int house = (int)value / (24 * 3600) % 3600;
-    NSString * str;
-    if (house != 0)
+    if (value < 0)
     {
-        str = [NSString stringWithFormat:@"%d小时%d分%d秒",house,minute,second];
+        return @"没有超时";
     }
-    else if (house== 0 && minute!=0)
+    int second = (int)value % 60;
+    int minute = (int)value / 60 % 60;
+    int hours = (int)value / 3600 % 24;
+    int day = (int)value / (3600 * 24);
+    NSString * str;
+    if (day != 0)
+    {
+        str = [NSString stringWithFormat:@"%d天%d时%d分%d秒",day,hours,minute,second];
+    }
+    else if (hours != 0)
+    {
+        str = [NSString stringWithFormat:@"%d时%d分%d秒",hours,minute,second];
+    }
+    else if (hours == 0 && minute != 0)
     {
         str = [NSString stringWithFormat:@"%d分%d秒",minute,second];
     }

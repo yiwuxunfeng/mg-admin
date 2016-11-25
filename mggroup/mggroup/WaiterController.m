@@ -233,7 +233,7 @@
         if (self.waiterChoose.dapartment.selectIndex != 0 && self.waiterChoose.dapartment.selectIndex != NSNotFound)
             [params setValue:[NSString stringWithFormat:@"%ld",self.waiterChoose.dapartment.selectIndex] forKey:@"waiterDep"];
         if (self.waiterChoose.memberStatus.selectIndex != 0 && self.waiterChoose.memberStatus.selectIndex != NSNotFound)
-            [params setValue:[NSString stringWithFormat:@"%ld",self.waiterChoose.memberStatus.selectIndex] forKey:@"workingState"];
+            [params setValue:[NSString stringWithFormat:@"%ld",self.waiterChoose.memberStatus.selectIndex - 1] forKey:@"waiterState"];
         if (self.waiterChoose.nameText.text.length > 0)
             [params setValue:self.waiterChoose.nameText.text forKey:@"name"];
     }
@@ -434,7 +434,7 @@
     }
     else
     {
-        cell.facePicImage.image = [UIImage imageNamed:@"alan.png"];
+        cell.facePicImage.image = [UIImage imageNamed:@"alan"];
     }
     return cell;
 }

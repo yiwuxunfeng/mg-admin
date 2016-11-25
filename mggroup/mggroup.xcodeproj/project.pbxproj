@@ -60,6 +60,8 @@
 		FCB9A12F1DBDEB1F00417C80 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FCB9A12E1DBDEB1F00417C80 /* UIKit.framework */; };
 		FCB9A1311DBDEB5E00417C80 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FCB9A1301DBDEB5E00417C80 /* QuartzCore.framework */; };
 		FCB9A1341DBDFD8000417C80 /* SaveHeadImage.m in Sources */ = {isa = PBXBuildFile; fileRef = FCB9A1331DBDFD8000417C80 /* SaveHeadImage.m */; };
+		FCBE1C5B1DDC44E2001AB3ED /* TaskNoAcceptCancelCallCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FCBE1C5A1DDC44E2001AB3ED /* TaskNoAcceptCancelCallCell.m */; };
+		FCBE1C5E1DDC44FC001AB3ED /* TaskNoAcceptCancelMenuCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FCBE1C5D1DDC44FC001AB3ED /* TaskNoAcceptCancelMenuCell.m */; };
 		FCC7BCC11D93B3CC00F0B900 /* TaskBaseController.m in Sources */ = {isa = PBXBuildFile; fileRef = FCC7BCC01D93B3CC00F0B900 /* TaskBaseController.m */; };
 		FCC7BCC41D93C13800F0B900 /* TaskNoCompleteController.m in Sources */ = {isa = PBXBuildFile; fileRef = FCC7BCC31D93C13800F0B900 /* TaskNoCompleteController.m */; };
 		FCC7BCC71D93CE1700F0B900 /* TaskCodeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FCC7BCC61D93CE1700F0B900 /* TaskCodeCell.m */; };
@@ -193,6 +195,10 @@
 		FCB9A1301DBDEB5E00417C80 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		FCB9A1321DBDFD8000417C80 /* SaveHeadImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SaveHeadImage.h; sourceTree = "<group>"; };
 		FCB9A1331DBDFD8000417C80 /* SaveHeadImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SaveHeadImage.m; sourceTree = "<group>"; };
+		FCBE1C591DDC44E2001AB3ED /* TaskNoAcceptCancelCallCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskNoAcceptCancelCallCell.h; sourceTree = "<group>"; };
+		FCBE1C5A1DDC44E2001AB3ED /* TaskNoAcceptCancelCallCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TaskNoAcceptCancelCallCell.m; sourceTree = "<group>"; };
+		FCBE1C5C1DDC44FC001AB3ED /* TaskNoAcceptCancelMenuCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskNoAcceptCancelMenuCell.h; sourceTree = "<group>"; };
+		FCBE1C5D1DDC44FC001AB3ED /* TaskNoAcceptCancelMenuCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TaskNoAcceptCancelMenuCell.m; sourceTree = "<group>"; };
 		FCC7BCBF1D93B3CC00F0B900 /* TaskBaseController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskBaseController.h; sourceTree = "<group>"; };
 		FCC7BCC01D93B3CC00F0B900 /* TaskBaseController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TaskBaseController.m; sourceTree = "<group>"; };
 		FCC7BCC21D93C13800F0B900 /* TaskNoCompleteController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskNoCompleteController.h; sourceTree = "<group>"; };
@@ -326,6 +332,10 @@
 				FC1C62A01D12716200BB8445 /* EndTaskCell.m */,
 				FCC7BCC21D93C13800F0B900 /* TaskNoCompleteController.h */,
 				FCC7BCC31D93C13800F0B900 /* TaskNoCompleteController.m */,
+				FCA6F6181D94D0FF0052F212 /* TaskCompleteController.h */,
+				FCA6F6191D94D0FF0052F212 /* TaskCompleteController.m */,
+				FCA6F61B1D94D10C0052F212 /* TaskCancelController.h */,
+				FCA6F61C1D94D10C0052F212 /* TaskCancelController.m */,
 				FCC7BCC51D93CE1700F0B900 /* TaskCodeCell.h */,
 				FCC7BCC61D93CE1700F0B900 /* TaskCodeCell.m */,
 				FCC7BCC81D93CF7A00F0B900 /* TaskNoAcceptCallCell.h */,
@@ -344,12 +354,12 @@
 				FCC7BCDB1D93CFFC00F0B900 /* TaskCancelCallCell.m */,
 				FCC7BCDD1D93D01000F0B900 /* TaskCancelMenuCell.h */,
 				FCC7BCDE1D93D01000F0B900 /* TaskCancelMenuCell.m */,
+				FCBE1C591DDC44E2001AB3ED /* TaskNoAcceptCancelCallCell.h */,
+				FCBE1C5A1DDC44E2001AB3ED /* TaskNoAcceptCancelCallCell.m */,
+				FCBE1C5C1DDC44FC001AB3ED /* TaskNoAcceptCancelMenuCell.h */,
+				FCBE1C5D1DDC44FC001AB3ED /* TaskNoAcceptCancelMenuCell.m */,
 				FCA6F6151D94C5520052F212 /* AssignOrderController.h */,
 				FCA6F6161D94C5520052F212 /* AssignOrderController.m */,
-				FCA6F6181D94D0FF0052F212 /* TaskCompleteController.h */,
-				FCA6F6191D94D0FF0052F212 /* TaskCompleteController.m */,
-				FCA6F61B1D94D10C0052F212 /* TaskCancelController.h */,
-				FCA6F61C1D94D10C0052F212 /* TaskCancelController.m */,
 				FC8C4CB41D9505A5004C31F7 /* AssignTaskWaiterCell.h */,
 				FC8C4CB51D9505A5004C31F7 /* AssignTaskWaiterCell.m */,
 				FCA90B3D1DC082EC00455AF9 /* StarView.h */,
@@ -607,6 +617,7 @@
 				FCC7BCDC1D93CFFC00F0B900 /* TaskCancelCallCell.m in Sources */,
 				FCA90B451DC0882000455AF9 /* TaskModel.m in Sources */,
 				FCC7BCD31D93CFBD00F0B900 /* TaskNoCompleteMenuCell.m in Sources */,
+				FCBE1C5B1DDC44E2001AB3ED /* TaskNoAcceptCancelCallCell.m in Sources */,
 				FC1C629B1D12709D00BB8445 /* TaskController.m in Sources */,
 				FCC7BCD61D93CFD600F0B900 /* TaskCompleteCallCell.m in Sources */,
 				FCC7BCCD1D93CF9200F0B900 /* TaskNoAcceptMenuCell.m in Sources */,
@@ -656,6 +667,7 @@
 				FCDE87A61D8E62C8003ECBDB /* WaiterChooseController.m in Sources */,
 				FC1C62841D124B9000BB8445 /* AppDelegate.m in Sources */,
 				FCB5790A1D99217600B3CA47 /* TaskAreaChooseCell.m in Sources */,
+				FCBE1C5E1DDC44FC001AB3ED /* TaskNoAcceptCancelMenuCell.m in Sources */,
 				FC1C62C01D12A48A00BB8445 /* DateCell.m in Sources */,
 				FCC7BCC11D93B3CC00F0B900 /* TaskBaseController.m in Sources */,
 				FCCECD271DADDCED009C7DEE /* AFHTTPSessionManager.m in Sources */,
